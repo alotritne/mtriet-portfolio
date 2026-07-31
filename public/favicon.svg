@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MT monogram">
+  <rect width="64" height="64" rx="14" fill="#030a07"/>
+  <path d="M13 43V20h5.5l7.5 12 7.5-12H39v23h-5.5V29.4L26 40.7l-7.5-11.3V43H13Z" fill="#f1f1e8"/>
+  <path d="M40 20h15v5h-4.7v18h-5.6V25H40v-5Z" fill="#68d49b"/>
+  <circle cx="54" cy="43" r="3" fill="#68d49b"/>
+</svg>

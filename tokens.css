@@ -1,0 +1,62 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 */
+/* Hallmark · macrostructure: Classic Portfolio · tone: technical luxury · anchor hue: mineral mint
+ * theme: studied-DNA evolved (source: user references + explicit cinematic technical pivot)
+ * paper: oklch(12% 0.014 165) · accent: oklch(78% 0.13 155)
+ * display: geometric sans (Space Grotesk) · body: neutral grotesque (IBM Plex Sans) · label: IBM Plex Mono
+ * nav: structured bar · footer: inline colophon · enrichment: Tier-A CSS architecture map
+ * studied: yes · DNA-source: user reference images · exclusions: hacker motifs, invented metrics, photography
+ * contrast: pass (40–41) · honest: pass (46) · chrome: pass (47) · tokens: pass (48)
+ * slop: static pass · visual viewport verification pending (34, 44)
+ */
+:root {
+  --color-paper: oklch(12% 0.014 165);
+  --color-paper-2: oklch(16% 0.016 165);
+  --color-paper-3: oklch(21% 0.02 165);
+  --color-ink: oklch(94% 0.012 105);
+  --color-ink-2: oklch(76% 0.012 135);
+  --color-muted: oklch(62% 0.012 145);
+  --color-rule: oklch(31% 0.016 155);
+  --color-rule-2: oklch(25% 0.014 155);
+  --color-accent: oklch(78% 0.13 155);
+  --color-accent-soft: oklch(34% 0.045 155);
+  --color-accent-ink: oklch(14% 0.02 155);
+  --color-focus: oklch(82% 0.18 155);
+  --color-graphite: oklch(9% 0.012 165);
+  --color-graphite-ink: oklch(94% 0.012 105);
+  --color-canvas: oklch(10% 0.012 165);
+  --color-canvas-raised: oklch(14% 0.014 165);
+  --color-cream: oklch(92% 0.025 105);
+  --color-cream-ink: oklch(16% 0.018 165);
+  --color-cream-muted: oklch(46% 0.018 155);
+  --color-spotlight-light-core: oklch(54% 0.14 225 / 0.2);
+  --color-spotlight-light-mid: oklch(62% 0.1 205 / 0.09);
+  --color-spotlight-coral-core: oklch(72% 0.08 42 / 0.16);
+  --color-spotlight-coral-mid: oklch(82% 0.045 68 / 0.08);
+  --color-terminal-cyan: oklch(78% 0.1 215);
+  --color-terminal-violet: oklch(78% 0.09 300);
+  --color-terminal-amber: oklch(82% 0.12 78);
+  --color-terminal-blue: oklch(76% 0.12 250);
+  --font-display: "Be Vietnam Pro", "Segoe UI", sans-serif;
+  --font-body: "Be Vietnam Pro", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", monospace;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 5rem;
+  --space-4xl: 7.5rem;
+  --text-sm: 0.8125rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.05rem, 1.4vw, 1.25rem);
+  --text-display: clamp(3.25rem, 7vw, 6.5rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 260ms;
+  --rule-thin: 1px;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+}

@@ -1,0 +1,8 @@
+{
+  "date": "2026-07-31",
+  "fontStack": "none (greenfield)",
+  "palette": "none (greenfield)",
+  "motion": "motion-cut",
+  "spacing": "none (greenfield)",
+  "framework": "React + TypeScript + Vite + TailwindCSS"
+}
