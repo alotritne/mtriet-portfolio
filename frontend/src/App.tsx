@@ -5,7 +5,9 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ProjectCase } from './components/ProjectCase'
 import { PortfolioTerminal } from './components/PortfolioTerminal'
 import { TypingText } from './components/TypingText'
-import { contactLinks, featuredProjects, getCopy, localizeSkillItem, profile, skillGroups } from './data'
+import { contactLinks, featuredProjects as fallbackProjects, getCopy, localizeSkillItem, profile, skillGroups } from './data'
+import { portfolioApi } from './lib/api'
+import type { Project } from './types'
 import type { Locale } from './types'
 
 function detectLocale(): Locale {
@@ -20,6 +22,7 @@ export default function App() {
   const pageRef = useRef<HTMLDivElement>(null)
   const [locale, setLocaleState] = useState<Locale>(detectLocale)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>(fallbackProjects)
   const reduceMotion = useReducedMotion()
   const copy = getCopy(locale)
   const setLocale = (next: Locale) => {
@@ -28,6 +31,7 @@ export default function App() {
   }
 
   useEffect(() => { document.documentElement.lang = locale }, [locale])
+  useEffect(() => { portfolioApi.publicProjects().then(items => { const featured = items.filter(item => item.featured !== false); if (featured.length) setFeaturedProjects(featured) }).catch(() => undefined) }, [])
   const heroGroup = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.065 } },

@@ -1,8 +1,10 @@
 # Dependencies
 node_modules/
+.vite/
 
 # Production output
 dist/
+backend/dist/
 
 # TypeScript build cache and generated config output
 *.tsbuildinfo
@@ -29,4 +31,3 @@ Thumbs.db
 
 # Test coverage
 coverage/
-

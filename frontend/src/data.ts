@@ -6,8 +6,8 @@ export const profile = {
   major: { vi: "Công nghệ thông tin", en: "Information Technology" },
   studentYear: 2,
   studentLabel: {
-    vi: "Sinh viên năm 2 ngành Công nghệ thông tin",
-    en: "Second-year Information Technology student",
+    vi: "Sinh viên ngành Công nghệ thông tin",
+    en: "Information Technology student",
   },
   gpa: "3.25",
   location: { vi: "TP. Hồ Chí Minh", en: "Ho Chi Minh City" },
