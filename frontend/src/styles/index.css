@@ -1363,3 +1363,174 @@ body,
     display: none;
   }
 }
+
+/* Hallmark · component: interactive terminal · genre: atmospheric-technical · theme: existing studied-DNA
+ * treatment: restrained glass · controls: decorative Linux window controls
+ */
+.portfolio-hero {
+  z-index: 22;
+}
+
+.portfolio-terminal {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  overflow: clip;
+  border-color: color-mix(in oklch, var(--color-accent) 24%, var(--color-rule));
+  background:
+    linear-gradient(145deg, color-mix(in oklch, var(--color-ink) 5%, transparent), transparent 38%),
+    color-mix(in oklch, var(--color-canvas-raised) 72%, transparent);
+  box-shadow:
+    0 2rem 5rem color-mix(in oklch, var(--color-graphite) 70%, transparent),
+    0 0 3rem color-mix(in oklch, var(--color-accent) 7%, transparent),
+    inset 0 1px 0 color-mix(in oklch, var(--color-ink) 11%, transparent),
+    inset 0 0 0 1px color-mix(in oklch, var(--color-accent) 4%, transparent);
+  backdrop-filter: blur(24px) saturate(1.18);
+  -webkit-backdrop-filter: blur(24px) saturate(1.18);
+}
+
+.portfolio-terminal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in oklch, var(--color-ink) 9%, transparent), transparent 34%),
+    radial-gradient(circle at 88% 12%, color-mix(in oklch, var(--color-accent) 9%, transparent), transparent 38%);
+}
+
+.portfolio-terminal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 2.5rem color-mix(in oklch, var(--color-accent) 3%, transparent);
+}
+
+.portfolio-terminal > header,
+.portfolio-terminal > .terminal-screen,
+.portfolio-terminal > .terminal-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio-terminal > header {
+  min-height: 3.5rem;
+  background: color-mix(in oklch, var(--color-canvas-raised) 58%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.terminal-titlebar,
+.terminal-status,
+.terminal-window-controls {
+  display: flex;
+  align-items: center;
+}
+
+.terminal-titlebar {
+  min-width: 0;
+  gap: var(--space-md);
+}
+
+.terminal-titlebar > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-window-controls {
+  flex: 0 0 auto;
+  gap: var(--space-sm);
+}
+
+.terminal-window-controls i {
+  width: 1rem;
+  height: 1rem;
+  display: grid;
+  place-items: center;
+  border: var(--rule-thin) solid color-mix(in oklch, var(--color-ink) 18%, transparent);
+  border-radius: 50%;
+  color: var(--color-accent-ink);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 22%, transparent);
+}
+
+.terminal-window-controls svg {
+  width: 0.58rem;
+  height: 0.58rem;
+  stroke-width: 2;
+  opacity: 0.46;
+}
+
+.terminal-window-controls .is-close { background: var(--color-terminal-danger); }
+.terminal-window-controls .is-minimize { background: var(--color-terminal-amber); }
+.terminal-window-controls .is-maximize { background: var(--color-accent); }
+
+.portfolio-terminal:hover .terminal-window-controls svg,
+.portfolio-terminal:focus-within .terminal-window-controls svg {
+  opacity: 0.88;
+}
+
+.terminal-status {
+  flex: 0 0 auto;
+  gap: var(--space-sm);
+  color: var(--color-ink-2);
+}
+
+.terminal-status i {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0.75rem var(--color-accent);
+}
+
+.terminal-screen {
+  background: color-mix(in oklch, var(--color-graphite) 24%, transparent);
+}
+
+.terminal-actions {
+  background: color-mix(in oklch, var(--color-canvas-raised) 54%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.terminal-actions button {
+  background: color-mix(in oklch, var(--color-canvas-raised) 46%, transparent);
+}
+
+.terminal-actions button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.terminal-actions button:active {
+  color: var(--color-accent-ink);
+  background: var(--color-accent);
+}
+
+@media (max-width: 44rem) {
+  .portfolio-terminal > header {
+    padding-inline: var(--space-md);
+  }
+
+  .terminal-titlebar {
+    gap: var(--space-sm);
+  }
+
+  .terminal-window-controls {
+    gap: var(--space-xs);
+  }
+
+  .terminal-window-controls i {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .terminal-window-controls svg {
+    display: none;
+  }
+}

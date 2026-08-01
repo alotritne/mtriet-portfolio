@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import { Minus, Square, X } from 'lucide-react'
 import type { Locale } from '../types'
 import { getCopy, localizeSkillItem, profile, skillGroups } from '../data'
 
@@ -98,7 +99,17 @@ export function PortfolioTerminal({ locale }: { locale: Locale }) {
 
   return (
     <aside className="portfolio-terminal" aria-label={messages.label} onClick={() => inputRef.current?.focus()}>
-      <header><span>{messages.title}</span><span>{messages.status}</span></header>
+      <header>
+        <div className="terminal-titlebar">
+          <span className="terminal-window-controls" aria-hidden="true">
+            <i className="is-close"><X /></i>
+            <i className="is-minimize"><Minus /></i>
+            <i className="is-maximize"><Square /></i>
+          </span>
+          <span>{messages.title}</span>
+        </div>
+        <span className="terminal-status"><i aria-hidden="true" />{messages.status}</span>
+      </header>
       <div className="terminal-screen">
         <p className="terminal-welcome"><i aria-hidden="true" />{messages.welcome}</p>
         <p className="terminal-hint">{messages.hint}</p>
