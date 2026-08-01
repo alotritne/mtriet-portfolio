@@ -56,6 +56,7 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-fast: 140ms;
   --dur-base: 260ms;
+  --dur-card: 420ms;
   --rule-thin: 1px;
   --radius-sm: 0.25rem;
   --radius-md: 0.75rem;

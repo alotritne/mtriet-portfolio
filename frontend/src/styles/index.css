@@ -1122,9 +1122,10 @@ body,
 }
 
 .portfolio-project-card,
-.skills-grid article {
+.skills-grid article,
+.portfolio-terminal {
   transform-origin: center;
-  transition: transform var(--dur-base) var(--ease-out);
+  transition: transform var(--dur-card) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1147,16 +1148,24 @@ body,
   .skills-grid article:hover svg {
     color: var(--color-cream-muted);
   }
+
+  .portfolio-terminal:hover {
+    z-index: 2;
+    transform: scale(1.03);
+    border-color: var(--color-rule);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .portfolio-project-card,
-  .skills-grid article {
+  .skills-grid article,
+  .portfolio-terminal {
     transition-duration: 0.01ms;
   }
 
   .portfolio-project-card:hover,
-  .skills-grid article:hover {
+  .skills-grid article:hover,
+  .portfolio-terminal:hover {
     transform: none;
   }
 
