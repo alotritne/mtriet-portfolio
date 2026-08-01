@@ -32,6 +32,8 @@
   --color-spotlight-light-mid: oklch(62% 0.1 205 / 0.09);
   --color-spotlight-coral-core: oklch(72% 0.08 42 / 0.16);
   --color-spotlight-coral-mid: oklch(82% 0.045 68 / 0.08);
+  --color-spotlight-cream-core: oklch(66% 0.075 145 / 0.18);
+  --color-spotlight-cream-mid: oklch(76% 0.045 132 / 0.08);
   --color-terminal-cyan: oklch(78% 0.1 215);
   --color-terminal-violet: oklch(78% 0.09 300);
   --color-terminal-amber: oklch(82% 0.12 78);

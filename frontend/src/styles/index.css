@@ -1167,6 +1167,180 @@ body,
   }
 }
 
+/* Hallmark · global pointer light + section-anchored ambient lights
+ */
+@property --pointer-light-core {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --pointer-light-mid {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+.portfolio-page {
+  --pointer-x: 68vw;
+  --pointer-y: 32vh;
+  --pointer-light-radius: clamp(6.5rem, 30vw, 24rem);
+  --light-surface-top: 100vh;
+  --light-surface-bottom: 100vh;
+  background-color: var(--color-canvas);
+  background-image: none;
+  background-attachment: scroll;
+}
+
+.portfolio-page::before,
+.portfolio-page:hover::before {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background: radial-gradient(circle var(--pointer-light-radius) at var(--pointer-x) var(--pointer-y), color-mix(in oklch, var(--color-accent) 15%, transparent), color-mix(in oklch, var(--color-accent) 6%, transparent) 38%, transparent 72%);
+  opacity: 1;
+}
+
+.portfolio-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 21;
+  pointer-events: none;
+  background: radial-gradient(circle var(--pointer-light-radius) at var(--pointer-x) var(--pointer-y), var(--color-spotlight-cream-core), var(--color-spotlight-cream-mid) 38%, transparent 72%);
+  clip-path: polygon(
+    0 var(--light-surface-top),
+    100% var(--light-surface-top),
+    100% var(--light-surface-bottom),
+    0 var(--light-surface-bottom)
+  );
+}
+
+.portfolio-hero {
+  --static-light-x: 78vw;
+  --static-light-y: 36%;
+}
+
+.portfolio-hero::after {
+  background: none;
+  animation: none;
+  opacity: 0;
+}
+
+.portfolio-about {
+  --static-light-x: 20vw;
+  --static-light-y: 48%;
+}
+
+.portfolio-skills {
+  --static-light-x: 78vw;
+  --static-light-y: 44%;
+}
+
+.portfolio-skills::after {
+  inset: 0;
+  background:
+    radial-gradient(circle clamp(5rem, 12vw, 14rem) at 16vw 34%, var(--color-spotlight-cream-core), var(--color-spotlight-cream-mid) 38%, transparent 74%),
+    radial-gradient(circle clamp(5rem, 10vw, 12rem) at 84vw 66%, color-mix(in oklch, var(--color-spotlight-cream-core) 78%, transparent), color-mix(in oklch, var(--color-spotlight-cream-mid) 68%, transparent) 42%, transparent 76%);
+  opacity: 0.88;
+}
+
+.portfolio-projects {
+  --static-light-x: 80vw;
+  --static-light-y: 38%;
+}
+
+.portfolio-project-card::after {
+  background: none;
+}
+
+.portfolio-contact {
+  --static-light-x: 14vw;
+  --static-light-y: 52%;
+}
+
+.portfolio-hero,
+.portfolio-about,
+.portfolio-projects,
+.portfolio-contact {
+  position: relative;
+  isolation: isolate;
+}
+
+.portfolio-hero::before,
+.portfolio-about::before,
+.portfolio-projects::before,
+.portfolio-contact::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  z-index: 0;
+  width: 100vw;
+  pointer-events: none;
+  transform: translateX(-50%);
+  opacity: 1;
+}
+
+.portfolio-hero > *,
+.portfolio-about > *,
+.portfolio-projects > *,
+.portfolio-contact > * {
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-hero::before,
+.portfolio-hero:hover::before {
+  right: auto;
+  max-width: none;
+  aspect-ratio: auto;
+  border-radius: 0;
+  filter: none;
+  background:
+    radial-gradient(circle clamp(5rem, 11vw, 13rem) at 16vw 72%, color-mix(in oklch, var(--color-accent) 19%, transparent), color-mix(in oklch, var(--color-accent) 8%, transparent) 42%, transparent 74%),
+    radial-gradient(circle clamp(6rem, 13vw, 15rem) at 84vw 28%, color-mix(in oklch, var(--color-accent) 17%, transparent), color-mix(in oklch, var(--color-accent) 7%, transparent) 42%, transparent 74%);
+  opacity: 1;
+}
+
+.portfolio-about::before {
+  background: radial-gradient(circle clamp(5rem, 11vw, 13rem) at 84vw 62%, color-mix(in oklch, var(--color-accent) 11%, transparent), color-mix(in oklch, var(--color-accent) 4%, transparent) 42%, transparent 74%);
+}
+
+.portfolio-projects::before {
+  background:
+    radial-gradient(circle clamp(5rem, 12vw, 14rem) at 16vw 68%, color-mix(in oklch, var(--color-accent) 11%, transparent), color-mix(in oklch, var(--color-accent) 4%, transparent) 42%, transparent 75%),
+    radial-gradient(circle clamp(6rem, 13vw, 15rem) at 84vw 34%, color-mix(in oklch, var(--color-accent) 13%, transparent), color-mix(in oklch, var(--color-accent) 5%, transparent) 44%, transparent 76%);
+}
+
+.portfolio-contact::before {
+  background:
+    radial-gradient(circle clamp(5rem, 9vw, 11rem) at 16vw 62%, color-mix(in oklch, var(--color-accent) 14%, transparent), color-mix(in oklch, var(--color-accent) 6%, transparent) 42%, transparent 75%),
+    radial-gradient(circle clamp(5rem, 8vw, 10rem) at 84vw 38%, color-mix(in oklch, var(--color-accent) 11%, transparent), color-mix(in oklch, var(--color-accent) 4%, transparent) 40%, transparent 74%);
+}
+
+@media (max-width: 44rem) {
+  .portfolio-hero::before,
+  .portfolio-hero:hover::before,
+  .portfolio-projects::before,
+  .portfolio-contact::before {
+    background:
+      radial-gradient(circle 5rem at 32vw 34%, color-mix(in oklch, var(--color-accent) 12%, transparent), color-mix(in oklch, var(--color-accent) 4.5%, transparent) 42%, transparent 74%),
+      radial-gradient(circle 4rem at 68vw 70%, color-mix(in oklch, var(--color-accent) 10%, transparent), color-mix(in oklch, var(--color-accent) 3.5%, transparent) 42%, transparent 74%);
+  }
+
+  .portfolio-about::before {
+    background: radial-gradient(circle 5rem at 68vw 58%, color-mix(in oklch, var(--color-accent) 11%, transparent), color-mix(in oklch, var(--color-accent) 4%, transparent) 42%, transparent 74%);
+  }
+
+  .portfolio-skills::after {
+    background:
+      radial-gradient(circle 5rem at 32vw 34%, var(--color-spotlight-cream-core), var(--color-spotlight-cream-mid) 40%, transparent 74%),
+      radial-gradient(circle 4rem at 68vw 70%, color-mix(in oklch, var(--color-spotlight-cream-core) 76%, transparent), color-mix(in oklch, var(--color-spotlight-cream-mid) 66%, transparent) 42%, transparent 74%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .portfolio-project-card,
   .skills-grid article,
@@ -1181,7 +1355,11 @@ body,
   }
 
   .portfolio-page::before {
-    background: radial-gradient(circle 22rem at 76% 18%, var(--spotlight-core), transparent 72%);
-    opacity: 0.6;
+    background: none;
+    opacity: 0;
+  }
+
+  .portfolio-page::after {
+    display: none;
   }
 }

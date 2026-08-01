@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUpRight, Braces, Code2, Database, Mail, MapPin, Smartphone, Wrench } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
@@ -19,7 +19,6 @@ function detectLocale(): Locale {
 const skillIcons = [Braces, Code2, Database, Smartphone, Wrench]
 
 export default function App() {
-  const pageRef = useRef<HTMLDivElement>(null)
   const [locale, setLocaleState] = useState<Locale>(detectLocale)
   const [menuOpen, setMenuOpen] = useState(false)
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>(fallbackProjects)
@@ -32,6 +31,25 @@ export default function App() {
 
   useEffect(() => { document.documentElement.lang = locale }, [locale])
   useEffect(() => { portfolioApi.publicProjects().then(items => { const featured = items.filter(item => item.featured !== false); if (featured.length) setFeaturedProjects(featured) }).catch(() => undefined) }, [])
+  useEffect(() => {
+    const updateLightSurfaceBounds = () => {
+      const page = document.querySelector<HTMLElement>('.portfolio-page')
+      const lightSection = document.querySelector<HTMLElement>('.portfolio-skills')
+      if (!page || !lightSection) return
+      const bounds = lightSection.getBoundingClientRect()
+      const top = Math.min(window.innerHeight, Math.max(0, bounds.top))
+      const bottom = Math.min(window.innerHeight, Math.max(0, bounds.bottom))
+      page.style.setProperty('--light-surface-top', `${top}px`)
+      page.style.setProperty('--light-surface-bottom', `${bottom}px`)
+    }
+    updateLightSurfaceBounds()
+    window.addEventListener('scroll', updateLightSurfaceBounds, { passive: true })
+    window.addEventListener('resize', updateLightSurfaceBounds)
+    return () => {
+      window.removeEventListener('scroll', updateLightSurfaceBounds)
+      window.removeEventListener('resize', updateLightSurfaceBounds)
+    }
+  }, [])
   const heroGroup = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.065 } },
@@ -40,25 +58,13 @@ export default function App() {
     hidden: { opacity: 0, y: 8 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] as const } },
   }
-  const handlePagePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    const page = pageRef.current
-    if (!page || event.pointerType === 'touch') return
-    page.style.setProperty('--pointer-x', `${event.clientX}px`)
-    page.style.setProperty('--pointer-y', `${event.clientY}px`)
-    const lightSurface = document.querySelector<HTMLElement>('.portfolio-skills')
-    if (lightSurface) {
-      const bounds = lightSurface.getBoundingClientRect()
-      lightSurface.style.setProperty('--light-pointer-x', `${event.clientX - bounds.left}px`)
-      lightSurface.style.setProperty('--light-pointer-y', `${event.clientY - bounds.top}px`)
-    }
-    document.querySelectorAll<HTMLElement>('.portfolio-project-card').forEach(card => {
-      const bounds = card.getBoundingClientRect()
-      card.style.setProperty('--card-pointer-x', `${event.clientX - bounds.left}px`)
-      card.style.setProperty('--card-pointer-y', `${event.clientY - bounds.top}px`)
-    })
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion || event.pointerType === 'touch') return
+    event.currentTarget.style.setProperty('--pointer-x', `${event.clientX}px`)
+    event.currentTarget.style.setProperty('--pointer-y', `${event.clientY}px`)
   }
   return (
-    <div ref={pageRef} className="portfolio-page" id="top" onPointerMove={handlePagePointerMove}>
+    <div className="portfolio-page" id="top" onPointerMove={handlePointerMove}>
       <header className="portfolio-nav">
         <a className="portfolio-logo" href="#top" aria-label={`${profile.name} — home`}>MTRIET<span>.</span></a>
         <nav className={menuOpen ? 'portfolio-links is-open' : 'portfolio-links'} aria-label={locale === 'vi' ? 'Điều hướng chính' : 'Primary navigation'}>
@@ -71,7 +77,7 @@ export default function App() {
       </header>
 
       <main id="main">
-        <section className="portfolio-hero portfolio-shell">
+        <section className="portfolio-hero portfolio-shell" data-pointer-light>
           <motion.div className="portfolio-hero-copy" variants={heroGroup} initial={reduceMotion ? false : 'hidden'} animate="visible">
             <motion.p variants={heroItem} className="portfolio-role">{profile.studentLabel[locale]} · {profile.location[locale]}</motion.p>
             <motion.h1 variants={heroItem} className="kinetic-name">
@@ -85,24 +91,24 @@ export default function App() {
           <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}><PortfolioTerminal locale={locale} /></motion.div>
         </section>
 
-        <section className="portfolio-section portfolio-about portfolio-shell" id="about">
+        <section className="portfolio-section portfolio-about portfolio-shell" id="about" data-pointer-light>
           <header className="portfolio-section-head"><span>01</span><div><p>{copy.sectionLabels.about}</p><h2>{copy.aboutTitle}</h2></div></header>
           <div className="portfolio-about-grid"><p>{copy.aboutBody}</p><div><span>{copy.principle}</span>{copy.principles.map(item => <p key={item}>{item}</p>)}</div></div>
         </section>
 
-        <section className="portfolio-section portfolio-skills" id="capabilities">
+        <section className="portfolio-section portfolio-skills" id="capabilities" data-pointer-light>
           <div className="portfolio-shell">
             <header className="portfolio-section-head"><span>02</span><div><p>{copy.sectionLabels.capabilities}</p><h2>{copy.capabilitiesTitle}</h2></div><p>{copy.capabilitiesBody}</p></header>
             <div className="skills-grid">{skillGroups.map((group, index) => { const Icon = skillIcons[index]; return <article key={group.key}><Icon aria-hidden="true" /><h3>{copy.groupLabels[group.key]}</h3><div>{group.items.map(item => <span key={item}>{localizeSkillItem(item, locale)}</span>)}</div></article> })}</div>
           </div>
         </section>
 
-        <section className="portfolio-section portfolio-projects portfolio-shell" id="projects">
+        <section className="portfolio-section portfolio-projects portfolio-shell" id="projects" data-pointer-light>
           <header className="portfolio-section-head"><span>03</span><div><p>{copy.sectionLabels.projects}</p><h2>{copy.projectsTitle}</h2></div><p>{copy.projectsBody}</p></header>
           <div className="projects-grid">{featuredProjects.map((project, index) => <ProjectCase key={project.id} project={project} locale={locale} copy={copy} index={index} />)}</div>
         </section>
 
-        <section className="portfolio-contact portfolio-shell" id="contact">
+        <section className="portfolio-contact portfolio-shell" id="contact" data-pointer-light>
           <div><p>04 / {copy.sectionLabels.contact}</p><h2>{copy.contactTitle}</h2></div>
           <div><p>{copy.contactBody}</p><a href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight aria-hidden="true" /></a></div>
         </section>
