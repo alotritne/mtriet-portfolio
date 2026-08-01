@@ -1,0 +1,206 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 */
+/* Hallmark · genre: modern-minimal · macrostructure: Index-First · theme: technical luxury · anchor hue: mineral mint
+ * enrichment: none · nav: N9 · footer: Ft2 · contrast: pass (40–41) · slop: pass (42–45)
+ * honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (34, 49–57)
+ */
+
+.not-found-page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding-inline: clamp(var(--space-md), 4vw, var(--space-2xl));
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.not-found-nav,
+.not-found-footer {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+}
+
+.not-found-nav {
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  border-block-end: var(--rule-thin) solid var(--color-rule-2);
+}
+
+.not-found-wordmark {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.not-found-wordmark span,
+.not-found-protocol {
+  color: var(--color-accent);
+}
+
+.not-found-wordmark:hover {
+  color: var(--color-accent);
+}
+
+.not-found-wordmark:active {
+  transform: translateY(1px);
+}
+
+.not-found-main {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+  display: grid;
+  align-content: center;
+  gap: var(--space-2xl);
+  padding-block: var(--space-3xl);
+  animation: not-found-enter var(--dur-base) var(--ease-out) both;
+}
+
+.not-found-code {
+  margin: 0;
+  color: var(--color-rule);
+  font-family: var(--font-mono);
+  font-size: clamp(5rem, 27vw, 17rem);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.09em;
+  line-height: 0.72;
+  user-select: none;
+}
+
+.not-found-copy {
+  max-width: 42rem;
+}
+
+.not-found-protocol {
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.05em;
+}
+
+.not-found-copy h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 7vw, 5rem);
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
+.not-found-copy > p:last-child {
+  max-width: 52ch;
+  margin: var(--space-lg) 0 0;
+  color: var(--color-ink-2);
+}
+
+.not-found-index {
+  margin: 0;
+  border-block-start: var(--rule-thin) solid var(--color-rule);
+}
+
+.not-found-index > div {
+  display: grid;
+  gap: var(--space-sm);
+  padding-block: var(--space-md);
+  border-block-end: var(--rule-thin) solid var(--color-rule-2);
+}
+
+.not-found-index dt {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.not-found-index dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--color-ink-2);
+  overflow-wrap: anywhere;
+}
+
+.not-found-home {
+  width: fit-content;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border-block-end: var(--rule-thin) solid var(--color-accent);
+  color: var(--color-ink);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.not-found-home svg {
+  width: 1rem;
+}
+
+.not-found-home:hover {
+  color: var(--color-accent);
+  transform: translateX(-2px);
+}
+
+.not-found-home:active {
+  transform: translateX(0);
+}
+
+.not-found-wordmark[aria-disabled="true"],
+.not-found-home[aria-disabled="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.not-found-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-block: var(--space-lg);
+  border-block-start: var(--rule-thin) solid var(--color-rule-2);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+@keyframes not-found-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (min-width: 40rem) {
+  .not-found-main {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    column-gap: var(--space-3xl);
+  }
+
+  .not-found-code {
+    grid-row: span 3;
+    align-self: center;
+  }
+
+  .not-found-index > div {
+    grid-template-columns: minmax(9rem, 0.45fr) minmax(0, 1fr);
+  }
+
+  .not-found-footer {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found-main {
+    animation: not-found-enter-reduced 150ms linear both;
+  }
+
+  .not-found-home:hover,
+  .not-found-home:active {
+    transform: none;
+  }
+}
+
+@keyframes not-found-enter-reduced {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
