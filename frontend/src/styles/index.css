@@ -1187,13 +1187,25 @@ body,
   --pointer-light-radius: clamp(6.5rem, 30vw, 24rem);
   --light-surface-top: 100vh;
   --light-surface-bottom: 100vh;
+  position: relative;
+  isolation: isolate;
   background-color: var(--color-canvas);
   background-image: none;
   background-attachment: scroll;
 }
 
 .portfolio-page::before,
-.portfolio-page:hover::before {
+.portfolio-page::after {
+  content: none;
+}
+
+.portfolio-page > main {
+  position: relative;
+}
+
+.portfolio-page > main::before,
+.portfolio-page > main:hover::before {
+  content: '';
   position: fixed;
   inset: 0;
   z-index: 20;
@@ -1202,7 +1214,7 @@ body,
   opacity: 1;
 }
 
-.portfolio-page::after {
+.portfolio-page > main::after {
   content: '';
   position: fixed;
   inset: 0;
@@ -1354,12 +1366,12 @@ body,
     transform: none;
   }
 
-  .portfolio-page::before {
+  .portfolio-page > main::before {
     background: none;
     opacity: 0;
   }
 
-  .portfolio-page::after {
+  .portfolio-page > main::after {
     display: none;
   }
 }
@@ -1371,33 +1383,35 @@ body,
   z-index: 22;
 }
 
+.portfolio-hero > div:last-child,
 .portfolio-terminal {
   position: relative;
+  z-index: 22;
+}
+
+.portfolio-terminal {
   isolation: isolate;
-  z-index: 1;
   overflow: clip;
   border-color: color-mix(in oklch, var(--color-accent) 24%, var(--color-rule));
   background:
     linear-gradient(145deg, color-mix(in oklch, var(--color-ink) 5%, transparent), transparent 38%),
-    color-mix(in oklch, var(--color-canvas-raised) 72%, transparent);
+    var(--color-canvas-raised);
   box-shadow:
     0 2rem 5rem color-mix(in oklch, var(--color-graphite) 70%, transparent),
     0 0 3rem color-mix(in oklch, var(--color-accent) 7%, transparent),
     inset 0 1px 0 color-mix(in oklch, var(--color-ink) 11%, transparent),
     inset 0 0 0 1px color-mix(in oklch, var(--color-accent) 4%, transparent);
-  backdrop-filter: blur(24px) saturate(1.18);
-  -webkit-backdrop-filter: blur(24px) saturate(1.18);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .portfolio-page > main::before,
+  .portfolio-page > main::after {
+    display: none;
+  }
 }
 
 .portfolio-terminal::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 12% 0%, color-mix(in oklch, var(--color-ink) 9%, transparent), transparent 34%),
-    radial-gradient(circle at 88% 12%, color-mix(in oklch, var(--color-accent) 9%, transparent), transparent 38%);
+  content: none;
 }
 
 .portfolio-terminal::after {
