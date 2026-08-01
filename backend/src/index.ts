@@ -10,10 +10,12 @@ import projectRoutes from './routes/projects.js'
 const app = express()
 app.set('trust proxy', 1)
 app.use(helmet())
-const allowedOrigins = env.FRONTEND_ORIGIN.split(',').map(origin => origin.trim()).filter(Boolean)
+const allowedOrigins = new Set(
+  env.FRONTEND_ORIGIN.split(',').map(origin => new URL(origin.trim()).origin),
+)
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true)
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true)
     return callback(new Error('Origin is not allowed by CORS'))
   },
   credentials: true,
@@ -29,8 +31,11 @@ app.use('/api/projects', projectRoutes)
 app.use('/api', (_request, response) => response.status(404).json({ error: 'API route not found' }))
 app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
   void _next
+  if (error instanceof Error && error.message === 'Origin is not allowed by CORS') {
+    return response.status(403).json({ error: error.message })
+  }
   console.error(error)
-  response.status(500).json({ error: 'Internal server error' })
+  return response.status(500).json({ error: 'Internal server error' })
 })
 
 await ensureIndexes()
