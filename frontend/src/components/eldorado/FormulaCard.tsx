@@ -1,0 +1,2 @@
+type Props = { bank: string[]; crypto: string[] }
+export function FormulaCard({ bank, crypto }: Props) { return <aside className="eld-card eld-formulas"><div className="eld-card-heading"><div><span className="eld-eyebrow">Audit trail</span><h2>Formulas</h2></div></div><section><h3>Route A <i>Bank</i></h3>{bank.map(item => <code key={item}>{item}</code>)}</section><section><h3>Route B <i>USDT</i></h3>{crypto.map(item => <code key={item}>{item}</code>)}</section></aside> }
