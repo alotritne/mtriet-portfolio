@@ -1,2 +1,2 @@
-type Props = { title: string; amount: string; formula: string; tone?: 'neutral' | 'bank' | 'crypto' }
-export function FlowCard({ title, amount, formula, tone = 'neutral' }: Props) { return <article className={`eld-flow-card is-${tone}`}><span>{title}</span><strong>{amount}</strong><code>{formula}</code></article> }
+type Props = { title: string; amount: string; formula: string; fee?: string; icon?: string; tone?: 'neutral' | 'bank' | 'crypto' }
+export function FlowCard({ title, amount, formula, fee, icon = '·', tone = 'neutral' }: Props) { return <article className={`eld-flow-card is-${tone}`}><header><span className="eld-flow-icon" aria-hidden="true">{icon}</span><span>{title}</span></header><strong>{amount}</strong>{fee && <small>Fee <b>{fee}</b></small>}<code>{formula}</code></article> }
