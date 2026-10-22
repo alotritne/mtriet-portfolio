@@ -1,55 +1,28 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUpRight, Braces, Code2, Database, Mail, MapPin, Smartphone, Wrench } from 'lucide-react'
+import { ArrowUpRight, Braces, Code2, Database, Mail, Smartphone, Wrench } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
-import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { SiteHeader } from './components/SiteHeader'
+import { SiteFooter } from './components/SiteFooter'
+import { Reveal, ScrollProgress } from './components/PageMotion'
+import { projectCopy } from './projects/copy'
 import { ProjectCase } from './components/ProjectCase'
 import { PortfolioTerminal } from './components/PortfolioTerminal'
 import { TypingText } from './components/TypingText'
-import { contactLinks, featuredProjects as fallbackProjects, getCopy, localizeSkillItem, profile, skillGroups } from './data'
+import { featuredProjects as fallbackProjects, getCopy, profile, skillGroups } from './data'
+import { SkillBadge } from './components/SkillBadge'
+import { BlogSection } from './blog/BlogList'
+import { useLocale } from './hooks/useLocale'
 import { portfolioApi } from './lib/api'
 import type { Project } from './types'
-import type { Locale } from './types'
-
-function detectLocale(): Locale {
-  const saved = localStorage.getItem('portfolio-locale')
-  if (saved === 'vi' || saved === 'en') return saved
-  return navigator.language.toLowerCase().startsWith('en') ? 'en' : 'vi'
-}
 
 const skillIcons = [Braces, Code2, Database, Smartphone, Wrench]
 
 export default function App() {
-  const [locale, setLocaleState] = useState<Locale>(detectLocale)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [locale, setLocale] = useLocale()
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>(fallbackProjects)
   const reduceMotion = useReducedMotion()
   const copy = getCopy(locale)
-  const setLocale = (next: Locale) => {
-    setLocaleState(next)
-    localStorage.setItem('portfolio-locale', next)
-  }
-
-  useEffect(() => { document.documentElement.lang = locale }, [locale])
   useEffect(() => { portfolioApi.publicProjects().then(items => { const featured = items.filter(item => item.featured !== false); if (featured.length) setFeaturedProjects(featured) }).catch(() => undefined) }, [])
-  useEffect(() => {
-    const updateLightSurfaceBounds = () => {
-      const page = document.querySelector<HTMLElement>('.portfolio-page')
-      const lightSection = document.querySelector<HTMLElement>('.portfolio-skills')
-      if (!page || !lightSection) return
-      const bounds = lightSection.getBoundingClientRect()
-      const top = Math.min(window.innerHeight, Math.max(0, bounds.top))
-      const bottom = Math.min(window.innerHeight, Math.max(0, bounds.bottom))
-      page.style.setProperty('--light-surface-top', `${top}px`)
-      page.style.setProperty('--light-surface-bottom', `${bottom}px`)
-    }
-    updateLightSurfaceBounds()
-    window.addEventListener('scroll', updateLightSurfaceBounds, { passive: true })
-    window.addEventListener('resize', updateLightSurfaceBounds)
-    return () => {
-      window.removeEventListener('scroll', updateLightSurfaceBounds)
-      window.removeEventListener('resize', updateLightSurfaceBounds)
-    }
-  }, [])
   const heroGroup = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.065 } },
@@ -58,26 +31,13 @@ export default function App() {
     hidden: { opacity: 0, y: 8 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] as const } },
   }
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (reduceMotion || event.pointerType === 'touch') return
-    event.currentTarget.style.setProperty('--pointer-x', `${event.clientX}px`)
-    event.currentTarget.style.setProperty('--pointer-y', `${event.clientY}px`)
-  }
   return (
-    <div className="portfolio-page" id="top" onPointerMove={handlePointerMove}>
-      <header className="portfolio-nav">
-        <a className="portfolio-logo" href="#top" aria-label={`${profile.name} — home`}>MTRIET<span>.</span></a>
-        <nav className={menuOpen ? 'portfolio-links is-open' : 'portfolio-links'} aria-label={locale === 'vi' ? 'Điều hướng chính' : 'Primary navigation'}>
-          {copy.nav.map((label, index) => <a key={label} href={`#${copy.navIds[index]}`} onClick={() => setMenuOpen(false)}>{label}</a>)}
-        </nav>
-        <div className="portfolio-nav-actions">
-          <LanguageSwitcher locale={locale} setLocale={setLocale} />
-          <button className="portfolio-menu" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? copy.close : copy.menu}</button>
-        </div>
-      </header>
+    <div className="portfolio-page" id="top">
+      <a className="skip-link" href="#main">{locale === 'vi' ? 'Đến nội dung' : 'Skip to content'}</a>
+      <ScrollProgress /><SiteHeader locale={locale} setLocale={setLocale} current="home" />
 
       <main id="main">
-        <section className="portfolio-hero portfolio-shell" data-pointer-light>
+        <section className="portfolio-hero portfolio-shell">
           <motion.div className="portfolio-hero-copy" variants={heroGroup} initial={reduceMotion ? false : 'hidden'} animate="visible">
             <motion.p variants={heroItem} className="portfolio-role">{profile.studentLabel[locale]} · {profile.location[locale]}</motion.p>
             <motion.h1 variants={heroItem} className="kinetic-name">
@@ -86,38 +46,38 @@ export default function App() {
             </motion.h1>
             <motion.h2 variants={heroItem}><TypingText texts={profile.roles} /></motion.h2>
             <motion.p variants={heroItem} className="portfolio-summary">{copy.heroBody}</motion.p>
-            <motion.div variants={heroItem} className="portfolio-cta"><a className="primary" href="#projects">{copy.viewProjects}<ArrowDown aria-hidden="true" /></a><a href={`mailto:${profile.email}`}>{copy.contact}<Mail aria-hidden="true" /></a></motion.div>
+            <motion.div variants={heroItem} className="portfolio-cta"><a className="primary" href="/projects">{copy.viewProjects}<ArrowUpRight aria-hidden="true" /></a><a href={`mailto:${profile.email}`}>{copy.contact}<Mail aria-hidden="true" /></a></motion.div>
           </motion.div>
           <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}><PortfolioTerminal locale={locale} /></motion.div>
         </section>
 
-        <section className="portfolio-section portfolio-about portfolio-shell" id="about" data-pointer-light>
+        <motion.section initial={false} whileInView={reduceMotion ? {} : { y: [16, 0], opacity: [0.7, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5 }} className="portfolio-section portfolio-about portfolio-shell" id="about">
           <header className="portfolio-section-head"><span>01</span><div><p>{copy.sectionLabels.about}</p><h2>{copy.aboutTitle}</h2></div></header>
           <div className="portfolio-about-grid"><p>{copy.aboutBody}</p><div><span>{copy.principle}</span>{copy.principles.map(item => <p key={item}>{item}</p>)}</div></div>
-        </section>
+        </motion.section>
 
-        <section className="portfolio-section portfolio-skills" id="capabilities" data-pointer-light>
+        <section className="portfolio-section portfolio-skills" id="capabilities">
           <div className="portfolio-shell">
-            <header className="portfolio-section-head"><span>02</span><div><p>{copy.sectionLabels.capabilities}</p><h2>{copy.capabilitiesTitle}</h2></div><p>{copy.capabilitiesBody}</p></header>
-            <div className="skills-grid">{skillGroups.map((group, index) => { const Icon = skillIcons[index]; return <article key={group.key}><Icon aria-hidden="true" /><h3>{copy.groupLabels[group.key]}</h3><div>{group.items.map(item => <span key={item}>{localizeSkillItem(item, locale)}</span>)}</div></article> })}</div>
+            <Reveal><header className="portfolio-section-head"><span>02</span><div><p>{copy.sectionLabels.capabilities}</p><h2>{copy.capabilitiesTitle}</h2></div><p>{copy.capabilitiesBody}</p></header></Reveal>
+            <div className="skills-grid">{skillGroups.map((group, index) => { const Icon = skillIcons[index]; return <motion.article key={group.key} initial={false} whileInView={reduceMotion ? {} : { y: [18, 0], opacity: [0.65, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.45, delay: index * 0.05 }}><div className="skill-group-heading"><div className="skill-group-icon"><Icon aria-hidden="true" /></div><span className="skill-group-number">{String(index + 1).padStart(2, '0')}</span></div><h3>{copy.groupLabels[group.key]}</h3><div className="skill-items">{group.items.map(item => <SkillBadge key={item} name={item} locale={locale} />)}</div></motion.article> })}</div>
           </div>
         </section>
 
-        <section className="portfolio-section portfolio-projects portfolio-shell" id="projects" data-pointer-light>
-          <header className="portfolio-section-head"><span>03</span><div><p>{copy.sectionLabels.projects}</p><h2>{copy.projectsTitle}</h2></div><p>{copy.projectsBody}</p></header>
-          <div className="projects-grid">{featuredProjects.map((project, index) => <ProjectCase key={project.id} project={project} locale={locale} copy={copy} index={index} />)}</div>
+        <section className="portfolio-section portfolio-projects portfolio-shell" id="projects">
+          <Reveal><header className="portfolio-section-head"><span>03</span><div><p>{copy.sectionLabels.projects}</p><h2>{copy.projectsTitle}</h2></div><p>{copy.projectsBody}</p></header></Reveal>
+          <div className="projects-grid">{featuredProjects.slice(0, 3).map((project, index) => <Reveal key={project.id} delay={index * 0.06}><ProjectCase project={project} locale={locale} copy={copy} index={index} /></Reveal>)}</div>
+          <a className="blog-all" href="/projects">{projectCopy[locale].allProjects}<ArrowUpRight size={18} aria-hidden="true" /></a>
         </section>
 
-        <section className="portfolio-contact portfolio-shell" id="contact" data-pointer-light>
-          <div><p>04 / {copy.sectionLabels.contact}</p><h2>{copy.contactTitle}</h2></div>
-          <div><p>{copy.contactBody}</p><a href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight aria-hidden="true" /></a></div>
+        <BlogSection locale={locale} />
+
+        <section className="portfolio-contact portfolio-shell" id="contact">
+          <Reveal className="contact-reveal"><div><p>05 / {copy.sectionLabels.contact}</p><h2>{copy.contactTitle}</h2></div></Reveal>
+          <Reveal className="contact-reveal" delay={0.08}><div><p>{copy.contactBody}</p><a href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight aria-hidden="true" /></a></div></Reveal>
         </section>
       </main>
 
-      <footer className="portfolio-footer portfolio-shell">
-        <span>© {new Date().getFullYear()} {profile.name}</span>
-        <div>{contactLinks.map(link => <a key={link.id} href={link.url} target="_blank" rel="noreferrer">{link.id === 'website' && <MapPin aria-hidden="true" />}{link.label}{link.id !== 'website' && <ArrowUpRight aria-hidden="true" />}</a>)}</div>
-      </footer>
+      <SiteFooter locale={locale} />
     </div>
   )
 }

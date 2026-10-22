@@ -1,5 +1,18 @@
 import type { ObjectId } from 'mongodb'
 
+export interface PostDocument {
+  _id?: ObjectId
+  slug: string
+  title: { vi: string; en: string }
+  excerpt: { vi: string; en: string }
+  content: { vi: string; en: string }
+  tags: string[]
+  published: boolean
+  publishedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface AdminDocument {
   _id?: ObjectId
   email: string

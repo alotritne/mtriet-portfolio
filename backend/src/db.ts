@@ -22,6 +22,8 @@ export async function ensureIndexes() {
     db.collection('refreshTokens').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     db.collection('projects').createIndex({ slug: 1 }, { unique: true }),
     db.collection('projects').createIndex({ published: 1, position: 1 }),
+    db.collection('posts').createIndex({ slug: 1 }, { unique: true }),
+    db.collection('posts').createIndex({ published: 1, publishedAt: -1 }),
   ])
 }
 

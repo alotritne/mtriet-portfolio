@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { ArrowLeft, LogOut, Plus, Save, Trash2 } from 'lucide-react'
+import { BlogManager } from './BlogManager'
 import { adminApi } from '../lib/api'
 import { projects as fallbackProjects } from '../data'
 import type { Project } from '../types'
@@ -40,6 +41,8 @@ function ProjectEditor({ project, onCancel, onSaved }: { project: Project; onCan
 }
 
 export function AdminApp() {
+  const blogMode = new URLSearchParams(window.location.search).get('view') === 'blog'
+  const [blogDirty, setBlogDirty] = useState(false)
   const [admin, setAdmin] = useState<{ email: string } | null>(null)
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState<Project[]>([])
@@ -65,5 +68,5 @@ export function AdminApp() {
     try { for (const [index, project] of fallbackProjects.entries()) await adminApi.save({ ...project, id: '', slug: project.id, position: index, featured: project.id !== 'algo-tournament', published: true }); await loadProjects() }
     catch (reason) { setError(reason instanceof Error ? reason.message : 'Không thể nhập dữ liệu hiện tại') }
   }
-  return <main className="admin-page"><header className="admin-topbar"><div><p>PORTFOLIO ADMIN</p><h1>Quản lý dự án</h1><span>{admin.email}</span></div><div><a href="/"><ArrowLeft />Xem portfolio</a><button onClick={async () => { await adminApi.logout(); setAdmin(null) }}><LogOut />Đăng xuất</button></div></header><section className="admin-workspace"><div className="admin-workspace-head"><p>{items.length} dự án trong MongoDB</p><button className="admin-primary" onClick={() => setEditing(emptyProject())}><Plus />Thêm dự án</button></div>{error && <p className="admin-message is-error" role="alert">{error}</p>}{items.length === 0 ? <div className="admin-empty"><h2>Database chưa có dự án</h2><p>Nhập các dự án hiện đang có trong portfolio để bắt đầu chỉnh sửa bằng trang quản trị.</p><button onClick={importFallback}>Nhập dữ liệu hiện tại</button></div> : <div className="admin-project-list">{items.map(project => <article key={project.databaseId}><div><span>{String((project.position || 0) + 1).padStart(2, '0')}</span><h2>{project.name}</h2><p>{project.published ? 'Đang công khai' : 'Bản nháp'} · {project.stack.join(' · ')}</p></div><div><button onClick={() => setEditing(project)}>Chỉnh sửa</button><button className="is-danger" onClick={async () => { if (project.databaseId && window.confirm(`Xóa ${project.name}?`)) { await adminApi.remove(project.databaseId); await loadProjects() } }}><Trash2 />Xóa</button></div></article>)}</div>}</section></main>
+  return <main className="admin-page"><header className="admin-topbar"><div><p>PORTFOLIO ADMIN</p><h1>{blogMode ? 'Quản lý blog' : 'Quản lý dự án'}</h1><span>{admin.email}</span></div><div><a href="/"><ArrowLeft />Xem portfolio</a><button onClick={async () => { if (blogDirty && !window.confirm('Bạn có thay đổi chưa lưu. Đăng xuất?')) return; await adminApi.logout(); setAdmin(null) }}><LogOut />Đăng xuất</button></div></header><nav className="admin-tabs" aria-label="Quản trị nội dung"><a href="/admin" aria-current={!blogMode ? 'page' : undefined}>Dự án</a><a href="/admin?view=blog" aria-current={blogMode ? 'page' : undefined}>Blog</a></nav>{blogMode ? <BlogManager onDirtyChange={setBlogDirty} /> : <section className="admin-workspace"><div className="admin-workspace-head"><p>{items.length} dự án trong MongoDB</p><button className="admin-primary" onClick={() => setEditing(emptyProject())}><Plus />Thêm dự án</button></div>{error && <p className="admin-message is-error" role="alert">{error}</p>}{items.length === 0 ? <div className="admin-empty"><h2>Database chưa có dự án</h2><p>Nhập các dự án hiện đang có trong portfolio để bắt đầu chỉnh sửa bằng trang quản trị.</p><button onClick={importFallback}>Nhập dữ liệu hiện tại</button></div> : <div className="admin-project-list">{items.map(project => <article key={project.databaseId}><div><span>{String((project.position || 0) + 1).padStart(2, '0')}</span><h2>{project.name}</h2><p>{project.published ? 'Đang công khai' : 'Bản nháp'} · {project.stack.join(' · ')}</p></div><div><button onClick={() => setEditing(project)}>Chỉnh sửa</button><button className="is-danger" onClick={async () => { if (project.databaseId && window.confirm(`Xóa ${project.name}?`)) { await adminApi.remove(project.databaseId); await loadProjects() } }}><Trash2 />Xóa</button></div></article>)}</div>}</section>}</main>
 }

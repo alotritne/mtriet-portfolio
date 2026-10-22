@@ -1,4 +1,4 @@
-import type { Project } from '../types'
+import type { BlogPost, BlogSummary, Project } from '../types'
 
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 let accessToken = ''
@@ -8,9 +8,14 @@ let refreshPromise: Promise<Admin> | null = null
 type Admin = { email: string; role: 'admin' }
 type AuthResponse = { accessToken: string; csrfToken: string; admin: Admin }
 
+export class ApiError extends Error {
+  status: number
+  constructor(message: string, status: number) { super(message); this.status = status }
+}
+
 async function readJson<T>(response: Response): Promise<T> {
   const body = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(body.error || 'Không thể hoàn tất yêu cầu')
+  if (!response.ok) throw new ApiError(body.error || 'Không thể hoàn tất yêu cầu', response.status)
   return body as T
 }
 
@@ -54,6 +59,17 @@ async function authorized<T>(path: string, init: RequestInit = {}, retry = true)
 }
 
 export const portfolioApi = {
+  async posts(page = 1, filters: { query?: string; tag?: string; locale?: string; signal?: AbortSignal } = {}) {
+    const params = new URLSearchParams({ page: String(page), locale: filters.locale || 'vi' })
+    if (filters.query) params.set('q', filters.query)
+    if (filters.tag) params.set('tag', filters.tag)
+    return readJson<{ posts: BlogSummary[]; total: number; tags: string[] }>(await fetch(`${API_URL}/api/posts/public?${params}`, { signal: filters.signal }))
+  },
+  async post(slug: string) {
+    const response = await fetch(`${API_URL}/api/posts/public/${encodeURIComponent(slug)}`)
+    if (response.status === 404) return null
+    return (await readJson<{ post: BlogPost }>(response)).post
+  },
   async publicProjects() {
     const response = await fetch(`${API_URL}/api/projects/public`)
     const body = await readJson<{ projects: Project[] }>(response)
@@ -62,6 +78,11 @@ export const portfolioApi = {
 }
 
 export const adminApi = {
+  async posts() { return (await authorized<{ posts: BlogPost[] }>('/api/posts')).posts },
+  async savePost(post: BlogPost) {
+    return (await authorized<{ post: BlogPost }>(post.id ? `/api/posts/${post.id}` : '/api/posts', { method: post.id ? 'PUT' : 'POST', body: JSON.stringify(post) })).post
+  },
+  removePost(id: string) { return authorized<void>(`/api/posts/${id}`, { method: 'DELETE' }) },
   restore: refresh,
   async login(email: string, password: string) {
     const response = await fetch(`${API_URL}/api/auth/login`, {

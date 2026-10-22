@@ -143,8 +143,8 @@ export const localizeSkillItem = (item: string, locale: Locale) =>
 
 const copy = {
   vi: {
-    nav: ["Giới thiệu", "Kỹ năng", "Dự án", "Liên hệ"],
-    navIds: ["about", "capabilities", "projects", "contact"],
+    nav: ["Giới thiệu", "Kỹ năng", "Dự án", "Blog", "Liên hệ"],
+    navIds: ["about", "capabilities", "projects", "blog", "contact"],
     heroBody:
       "Mình thích tìm hiểu cách các phần của một sản phẩm kết nối với nhau — từ API và dữ liệu phía sau đến giao diện mà người dùng trực tiếp tương tác. Hiện tại, mình tập trung vào backend, full-stack và phát triển ứng dụng Android.",
     viewProjects: "Xem dự án",
@@ -187,7 +187,7 @@ const copy = {
     features: "Tính năng chính",
     stack: "Công nghệ",
     repository: "Mã nguồn",
-    unavailable: "Triển khai private",
+    unavailable: "Chưa cung cấp",
     openRepo: "Xem mã nguồn",
     contactTitle: "Cảm ơn bạn đã ghé qua.",
     contactBody:
@@ -198,8 +198,8 @@ const copy = {
     close: "Đóng điều hướng",
   },
   en: {
-    nav: ["About", "Skills", "Projects", "Contact"],
-    navIds: ["about", "capabilities", "projects", "contact"],
+    nav: ["About", "Skills", "Projects", "Blog", "Contact"],
+    navIds: ["about", "capabilities", "projects", "blog", "contact"],
     heroBody:
       "I enjoy understanding how the parts of a product connect—from APIs and data behind the scenes to the interfaces people interact with. Right now, I’m focused on backend, full-stack, and Android development.",
     viewProjects: "View projects",

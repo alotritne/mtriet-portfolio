@@ -1,49 +1,20 @@
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import express from 'express'
-import helmet from 'helmet'
+import app from './app.js'
 import { env } from './config/env.js'
 import { closeDatabase, ensureIndexes } from './db.js'
-import authRoutes from './routes/auth.js'
-import projectRoutes from './routes/projects.js'
+import { databaseErrorMessage } from './database-error.js'
 
-const app = express()
-app.set('trust proxy', 1)
-app.use(helmet())
-const allowedOrigins = new Set(
-  env.FRONTEND_ORIGIN.split(',').map(origin => new URL(origin.trim()).origin),
-)
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin || allowedOrigins.has(origin)) return callback(null, true)
-    return callback(new Error('Origin is not allowed by CORS'))
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
-}))
-app.use(express.json({ limit: '256kb' }))
-app.use(cookieParser())
+try {
+  await ensureIndexes()
+  const server = app.listen(env.PORT, () => console.log(`Portfolio API listening on port ${env.PORT}`))
 
-app.get('/api/health', (_request, response) => response.json({ status: 'ok' }))
-app.use('/api/auth', authRoutes)
-app.use('/api/projects', projectRoutes)
-app.use('/api', (_request, response) => response.status(404).json({ error: 'API route not found' }))
-app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
-  void _next
-  if (error instanceof Error && error.message === 'Origin is not allowed by CORS') {
-    return response.status(403).json({ error: error.message })
-  }
-  console.error(error)
-  return response.status(500).json({ error: 'Internal server error' })
-})
-
-await ensureIndexes()
-const server = app.listen(env.PORT, () => console.log(`Portfolio API listening on port ${env.PORT}`))
-
-process.on('SIGTERM', () => {
-  server.close(async () => {
-    await closeDatabase()
-    process.exit(0)
+  process.on('SIGTERM', () => {
+    server.close(async () => {
+      await closeDatabase()
+      process.exit(0)
+    })
   })
-})
+} catch (error) {
+  console.error(databaseErrorMessage(error))
+  await closeDatabase()
+  process.exitCode = 1
+}
