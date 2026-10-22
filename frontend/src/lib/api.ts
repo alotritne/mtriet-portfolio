@@ -1,4 +1,5 @@
 import type { BlogPost, BlogSummary, Project } from '../types'
+import { filterSample, samplePost, sampleSummary } from '../blog/samplePost'
 
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 let accessToken = ''
@@ -63,12 +64,25 @@ export const portfolioApi = {
     const params = new URLSearchParams({ page: String(page), locale: filters.locale || 'vi' })
     if (filters.query) params.set('q', filters.query)
     if (filters.tag) params.set('tag', filters.tag)
-    return readJson<{ posts: BlogSummary[]; total: number; tags: string[] }>(await fetch(`${API_URL}/api/posts/public?${params}`, { signal: filters.signal }))
+    try {
+      const result = await readJson<{ posts: BlogSummary[]; total: number; tags: string[] }>(await fetch(`${API_URL}/api/posts/public?${params}`, { signal: filters.signal }))
+      if (result.total || page > 1) return result
+    } catch (error) {
+      if (filters.signal?.aborted) throw error
+    }
+    const locale = filters.locale === 'en' ? 'en' : 'vi'
+    const visible = page === 1 && filterSample(filters.query || '', filters.tag || '', locale)
+    return { posts: visible ? [sampleSummary] : [], total: visible ? 1 : 0, tags: samplePost.tags }
   },
   async post(slug: string) {
-    const response = await fetch(`${API_URL}/api/posts/public/${encodeURIComponent(slug)}`)
-    if (response.status === 404) return null
-    return (await readJson<{ post: BlogPost }>(response)).post
+    try {
+      const response = await fetch(`${API_URL}/api/posts/public/${encodeURIComponent(slug)}`)
+      if (response.ok) return (await readJson<{ post: BlogPost }>(response)).post
+      if (response.status !== 404) await readJson(response)
+    } catch {
+      // The verified sample remains readable when the API is temporarily unavailable.
+    }
+    return slug === samplePost.slug ? samplePost : null
   },
   async publicProjects() {
     const response = await fetch(`${API_URL}/api/projects/public`)
