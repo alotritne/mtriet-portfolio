@@ -39,6 +39,11 @@
   min-width: 0;
 }
 
+/* Flex children with a ch-based maximum can outgrow narrow phone viewports. */
+.portfolio-hero-reimagined .portfolio-hero-copy > * {
+  max-width: 100%;
+}
+
 .hero-edition {
   display: inline-flex;
   flex-wrap: wrap;
@@ -107,6 +112,7 @@
 }
 
 .portfolio-hero-reimagined .portfolio-summary {
+  width: 100%;
   max-width: 48ch;
   color: #a2b8b2;
   font-size: 0.96rem;
@@ -163,6 +169,7 @@
   --hero-art-ink: #143938;
   --hero-art-muted: #496e64;
   position: relative;
+  min-width: 0;
   min-height: 41rem;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
