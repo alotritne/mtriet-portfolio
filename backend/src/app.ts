@@ -6,6 +6,7 @@ import { env } from './config/env.js'
 import authRoutes from './routes/auth.js'
 import projectRoutes from './routes/projects.js'
 import postRoutes from './routes/posts.js'
+import siteRoutes from './routes/site.js'
 
 const app = express()
 app.set('trust proxy', 1)
@@ -29,6 +30,7 @@ app.get('/api/health', (_request, response) => response.json({ status: 'ok' }))
 app.use('/api/auth', authRoutes)
 app.use('/api/projects', projectRoutes)
 app.use('/api/posts', postRoutes)
+app.use('/api/site', siteRoutes)
 app.use('/api', (_request, response) => response.status(404).json({ error: 'API route not found' }))
 app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
   void _next

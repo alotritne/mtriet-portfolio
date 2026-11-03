@@ -333,8 +333,8 @@ h2 { max-width: 13ch; font-size: clamp(2.15rem, 5vw, 4.25rem); font-weight: 500;
 @media (hover: hover) and (pointer: fine) { .profile-panel:hover { border-color: var(--color-muted); } }
 @media (pointer: coarse) { .button, .nav a, .socials a { min-height: 3rem; } }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  html:not([data-motion='on']) { scroll-behavior: auto; }
+  html:not([data-motion='on']) *, html:not([data-motion='on']) *::before, html:not([data-motion='on']) *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
 /* Hallmark redesign · Cobalt / Marquee Hero */

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useReducedMotion } from 'motion/react'
+import { useMotionEnabled } from '../hooks/useMotionPreference'
 
 type Phase = 'typing' | 'holding' | 'deleting'
 
 export function TypingText({ texts }: { texts: readonly string[] }) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = !useMotionEnabled()
   const [textIndex, setTextIndex] = useState(0)
   const [visibleCount, setVisibleCount] = useState(0)
   const [phase, setPhase] = useState<Phase>('typing')

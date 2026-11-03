@@ -25,7 +25,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     let active = true
     setStatus('loading')
-    portfolioApi.publicProjects().then(items => { if (active) { setProjects(items.length ? items : fallbackProjects); setStatus('ready') } }).catch(() => { if (active) setStatus('fallback') })
+    portfolioApi.publicProjects().then(items => { if (active) { setProjects(items); setStatus('ready') } }).catch(() => { if (active) setStatus('fallback') })
     return () => { active = false }
   }, [attempt])
   useEffect(() => {

@@ -1,0 +1,197 @@
+/* Brand icons, a seamless ticker, and an independently morphing emblem. */
+.portfolio-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding-block-start: 2rem;
+  margin: 3rem 0 0;
+  border-block-start: 1px solid var(--color-rule);
+}
+.portfolio-facts div { min-width: 0; }
+.portfolio-facts dt { margin-block-end: 0.65rem; color: var(--color-muted); font: 0.68rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.07em; }
+.portfolio-facts dd { margin: 0; color: var(--color-ink); font-size: clamp(0.95rem, 1.6vw, 1.18rem); font-weight: 600; }
+@media (min-width: 48rem) { .portfolio-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.skill-badge > svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  opacity: 0.85;
+}
+
+.live-tech-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-block: 1px solid var(--color-rule-2);
+  background: var(--color-canvas-raised);
+  padding-block: 1.12rem;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 3.5%, black 96.5%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 3.5%, black 96.5%, transparent);
+}
+.live-tech-track {
+  display: flex;
+  width: max-content;
+  animation: live-marquee 48s linear infinite;
+  will-change: transform;
+}
+.live-tech-group {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.live-tech-item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding-inline: 1.4rem;
+  color: var(--color-ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.live-tech-item svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-accent);
+}
+.live-tech-item i {
+  margin-inline-start: 0.8rem;
+  color: var(--color-accent);
+  font-style: normal;
+  opacity: 0.75;
+}
+@keyframes live-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.live-morph-scene {
+  position: relative;
+  isolation: isolate;
+  width: clamp(12rem, 26vw, 20rem);
+  aspect-ratio: 1;
+  margin-block-start: clamp(1.5rem, 5vw, 4rem);
+}
+.live-morph-guide {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--color-rule);
+  border-radius: 50%;
+  animation: live-guide 36s linear infinite;
+}
+.live-morph-ring {
+  position: absolute;
+  inset: 5%;
+  display: grid;
+  place-items: center;
+  border-radius: 52% 48% 57% 43% / 44% 56% 45% 55%;
+  background: var(--color-accent);
+  animation: live-ring 10s ease-in-out infinite alternate;
+  will-change: border-radius, transform;
+}
+.live-morph-core {
+  width: 79%;
+  height: 79%;
+  background: var(--color-canvas);
+  border-radius: 45% 55% 41% 59% / 58% 45% 55% 42%;
+  animation: live-core 7.5s ease-in-out infinite alternate;
+  will-change: border-radius, transform;
+}
+.live-morph-spark {
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 1rem var(--color-accent);
+  transform-origin: 0 clamp(5.75rem, 13vw, 10rem);
+  animation: live-spark 13s linear infinite;
+}
+@keyframes live-ring {
+  0% { border-radius: 56% 44% 51% 49% / 43% 57% 45% 55%; transform: rotate(-8deg) scale(0.98); }
+  33% { border-radius: 41% 59% 46% 54% / 53% 43% 57% 47%; transform: rotate(8deg) scale(1.02); }
+  66% { border-radius: 49% 51% 63% 37% / 40% 54% 46% 60%; transform: rotate(-12deg) scale(0.97); }
+  100% { border-radius: 58% 42% 42% 58% / 58% 39% 61% 42%; transform: rotate(10deg) scale(1.01); }
+}
+@keyframes live-core {
+  0% { border-radius: 41% 59% 57% 43% / 46% 54% 39% 61%; transform: rotate(12deg) scale(0.99); }
+  35% { border-radius: 59% 41% 45% 55% / 55% 40% 60% 45%; transform: rotate(-8deg) scale(1.035); }
+  70% { border-radius: 45% 55% 60% 40% / 38% 62% 52% 48%; transform: rotate(17deg) scale(0.97); }
+  100% { border-radius: 52% 48% 40% 60% / 62% 47% 53% 38%; transform: rotate(-15deg) scale(1.02); }
+}
+@keyframes live-guide { to { transform: rotate(360deg); } }
+@keyframes live-spark { to { transform: rotate(360deg); } }
+
+.live-motion-switch {
+  position: fixed;
+  z-index: 31;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  background: var(--color-canvas-raised);
+  color: var(--color-ink);
+  font: 600 0.73rem var(--font-mono);
+  box-shadow: 0 0.45rem 1.5rem rgb(0 0 0 / 12%);
+  cursor: pointer;
+}
+.live-motion-switch span { color: var(--color-accent); }
+.live-motion-switch:hover, .live-motion-switch:focus-visible { border-color: var(--color-accent); }
+
+/* Override operating-system reduced-motion rules for the user's opt-in. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-motion='on'] .live-tech-track {
+    animation-duration: 48s !important;
+    animation-iteration-count: infinite !important;
+  }
+  html[data-motion='on'] .live-morph-ring {
+    animation-duration: 10s !important;
+    animation-iteration-count: infinite !important;
+  }
+  html[data-motion='on'] .live-morph-core {
+    animation-duration: 7.5s !important;
+    animation-iteration-count: infinite !important;
+  }
+  html[data-motion='on'] .live-morph-guide {
+    animation-duration: 36s !important;
+    animation-iteration-count: infinite !important;
+  }
+  html[data-motion='on'] .live-morph-spark {
+    animation-duration: 13s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+html[data-motion='off'] .live-tech-track,
+html[data-motion='off'] .live-morph-ring,
+html[data-motion='off'] .live-morph-core,
+html[data-motion='off'] .live-morph-guide,
+html[data-motion='off'] .live-morph-spark {
+  animation: none !important;
+}
+html[data-motion='off'] .portfolio-page *,
+html[data-motion='off'] .portfolio-page *::before,
+html[data-motion='off'] .portfolio-page *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (max-width: 40rem) {
+  .live-tech-item { padding-inline: 0.9rem; }
+  .live-motion-switch { font-size: 0.68rem; }
+  .live-morph-scene { width: min(16rem, 75vw); }
+}

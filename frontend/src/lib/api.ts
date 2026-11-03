@@ -1,4 +1,4 @@
-import type { BlogPost, BlogSummary, Project } from '../types'
+import type { BlogPost, BlogSummary, Project, SiteData } from '../types'
 import { filterSample, samplePost, sampleSummary } from '../blog/samplePost'
 
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
@@ -60,6 +60,10 @@ async function authorized<T>(path: string, init: RequestInit = {}, retry = true)
 }
 
 export const portfolioApi = {
+  async publicSite() {
+    const response = await fetch(`${API_URL}/api/site/public`)
+    return (await readJson<{ site: SiteData | null }>(response)).site
+  },
   async posts(page = 1, filters: { query?: string; tag?: string; locale?: string; signal?: AbortSignal } = {}) {
     const params = new URLSearchParams({ page: String(page), locale: filters.locale || 'vi' })
     if (filters.query) params.set('q', filters.query)
@@ -92,6 +96,8 @@ export const portfolioApi = {
 }
 
 export const adminApi = {
+  async site() { return (await authorized<{ site: SiteData | null }>('/api/site')).site },
+  async saveSite(site: SiteData) { return (await authorized<{ site: SiteData }>('/api/site', { method: 'PUT', body: JSON.stringify(site) })).site },
   async posts() { return (await authorized<{ posts: BlogPost[] }>('/api/posts')).posts },
   async savePost(post: BlogPost) {
     return (await authorized<{ post: BlogPost }>(post.id ? `/api/posts/${post.id}` : '/api/posts', { method: post.id ? 'PUT' : 'POST', body: JSON.stringify(post) })).post

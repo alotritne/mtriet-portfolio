@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, Braces, Code2, Database, Mail, Smartphone, Wrench } from 'lucide-react'
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { SiteHeader } from './components/SiteHeader'
 import { SiteFooter } from './components/SiteFooter'
 import { Reveal, ScrollProgress } from './components/PageMotion'
@@ -8,21 +8,31 @@ import { projectCopy } from './projects/copy'
 import { ProjectCase } from './components/ProjectCase'
 import { PortfolioTerminal } from './components/PortfolioTerminal'
 import { TypingText } from './components/TypingText'
-import { featuredProjects as fallbackProjects, getCopy, profile, skillGroups } from './data'
+import { featuredProjects as fallbackProjects, getCopy } from './data'
+import { defaultSite } from './siteDefaults'
+import { TechMarquee, MorphingLoop, MotionSwitch } from './components/LiveMotion'
 import { SkillBadge } from './components/SkillBadge'
 import { BlogSection } from './blog/BlogList'
 import { useLocale } from './hooks/useLocale'
+import { useMotionEnabled } from './hooks/useMotionPreference'
 import { portfolioApi } from './lib/api'
-import type { Project } from './types'
+import type { Project, SiteData } from './types'
 
 const skillIcons = [Braces, Code2, Database, Smartphone, Wrench]
 
 export default function App() {
   const [locale, setLocale] = useLocale()
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>(fallbackProjects)
-  const reduceMotion = useReducedMotion()
+  const [site, setSite] = useState<SiteData>(defaultSite)
+  const reduceMotion = !useMotionEnabled()
   const copy = getCopy(locale)
-  useEffect(() => { portfolioApi.publicProjects().then(items => { const featured = items.filter(item => item.featured !== false); if (featured.length) setFeaturedProjects(featured) }).catch(() => undefined) }, [])
+  useEffect(() => {
+    portfolioApi.publicProjects().then(items => setFeaturedProjects(items.filter(item => item.featured !== false))).catch(() => undefined)
+    portfolioApi.publicSite().then(data => { if (data) setSite(data) }).catch(() => undefined)
+  }, [])
+  const fullName = site.name.trim().split(/\s+/)
+  const splitAt = Math.max(1, Math.floor(fullName.length / 2))
+  const nameLines = [fullName.slice(0, splitAt).join(' '), fullName.slice(splitAt).join(' ')]
   const heroGroup = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.065 } },
@@ -35,31 +45,40 @@ export default function App() {
     <div className="portfolio-page" id="top">
       <a className="skip-link" href="#main">{locale === 'vi' ? 'Đến nội dung' : 'Skip to content'}</a>
       <ScrollProgress /><SiteHeader locale={locale} setLocale={setLocale} current="home" />
+      <MotionSwitch locale={locale} />
 
       <main id="main">
         <section className="portfolio-hero portfolio-shell">
           <motion.div className="portfolio-hero-copy" variants={heroGroup} initial={reduceMotion ? false : 'hidden'} animate="visible">
-            <motion.p variants={heroItem} className="portfolio-role">{profile.studentLabel[locale]} · {profile.location[locale]}</motion.p>
+            <motion.p variants={heroItem} className="portfolio-role">{locale === 'vi' ? `Sinh viên năm ${site.studentYear}` : `Year ${site.studentYear} student`} · {site.location[locale]}</motion.p>
             <motion.h1 variants={heroItem} className="kinetic-name">
-              <span className="kinetic-line"><span>{profile.nameLines[0]}</span></span>
-              <span className="kinetic-line is-accent"><span>{profile.nameLines[1]}</span></span>
+              <span className="kinetic-line"><span>{nameLines[0]}</span></span>
+              <span className="kinetic-line is-accent"><span>{nameLines[1]}</span></span>
             </motion.h1>
-            <motion.h2 variants={heroItem}><TypingText texts={profile.roles} /></motion.h2>
+            <motion.h2 variants={heroItem}><TypingText texts={site.roles} /></motion.h2>
             <motion.p variants={heroItem} className="portfolio-summary">{copy.heroBody}</motion.p>
-            <motion.div variants={heroItem} className="portfolio-cta"><a className="primary" href="/projects">{copy.viewProjects}<ArrowUpRight aria-hidden="true" /></a><a href={`mailto:${profile.email}`}>{copy.contact}<Mail aria-hidden="true" /></a></motion.div>
+            <motion.div variants={heroItem} className="portfolio-cta"><a className="primary" href="/projects">{copy.viewProjects}<ArrowUpRight aria-hidden="true" /></a><a href={`mailto:${site.email}`}>{copy.contact}<Mail aria-hidden="true" /></a></motion.div>
           </motion.div>
-          <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}><PortfolioTerminal locale={locale} /></motion.div>
+          <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}><PortfolioTerminal locale={locale} site={site} /></motion.div>
         </section>
+
+        <TechMarquee technologies={site.skills.flatMap(group => group.items)} />
 
         <motion.section initial={false} whileInView={reduceMotion ? {} : { y: [16, 0], opacity: [0.7, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5 }} className="portfolio-section portfolio-about portfolio-shell" id="about">
           <header className="portfolio-section-head"><span>01</span><div><p>{copy.sectionLabels.about}</p><h2>{copy.aboutTitle}</h2></div></header>
           <div className="portfolio-about-grid"><p>{copy.aboutBody}</p><div><span>{copy.principle}</span>{copy.principles.map(item => <p key={item}>{item}</p>)}</div></div>
+          <dl className="portfolio-facts">
+            <div><dt>{locale === 'vi' ? 'Ngành học' : 'Major'}</dt><dd>{site.major[locale]}</dd></div>
+            <div><dt>{locale === 'vi' ? 'Năm học' : 'Study year'}</dt><dd>{locale === 'vi' ? `Năm ${site.studentYear}` : `Year ${site.studentYear}`}</dd></div>
+            <div><dt>GPA / 4.0</dt><dd>{site.gpa}</dd></div>
+            <div><dt>{locale === 'vi' ? 'Địa điểm' : 'Location'}</dt><dd>{site.location[locale]}</dd></div>
+          </dl>
         </motion.section>
 
         <section className="portfolio-section portfolio-skills" id="capabilities">
           <div className="portfolio-shell">
             <Reveal><header className="portfolio-section-head"><span>02</span><div><p>{copy.sectionLabels.capabilities}</p><h2>{copy.capabilitiesTitle}</h2></div><p>{copy.capabilitiesBody}</p></header></Reveal>
-            <div className="skills-grid">{skillGroups.map((group, index) => { const Icon = skillIcons[index]; return <motion.article key={group.key} initial={false} whileInView={reduceMotion ? {} : { y: [18, 0], opacity: [0.65, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.45, delay: index * 0.05 }}><div className="skill-group-heading"><div className="skill-group-icon"><Icon aria-hidden="true" /></div><span className="skill-group-number">{String(index + 1).padStart(2, '0')}</span></div><h3>{copy.groupLabels[group.key]}</h3><div className="skill-items">{group.items.map(item => <SkillBadge key={item} name={item} locale={locale} />)}</div></motion.article> })}</div>
+            <div className="skills-grid">{site.skills.map((group, index) => { const Icon = skillIcons[index % skillIcons.length]; return <motion.article key={group.key} initial={false} whileInView={reduceMotion ? {} : { y: [18, 0], opacity: [0.65, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.45, delay: index * 0.05 }}><div className="skill-group-heading"><div className="skill-group-icon"><Icon aria-hidden="true" /></div><span className="skill-group-number">{String(index + 1).padStart(2, '0')}</span></div><h3>{group.label[locale]}</h3><div className="skill-items">{group.items.map(item => <SkillBadge key={item} name={item} locale={locale} />)}</div></motion.article> })}</div>
           </div>
         </section>
 
@@ -72,12 +91,12 @@ export default function App() {
         <BlogSection locale={locale} />
 
         <section className="portfolio-contact portfolio-shell" id="contact">
-          <Reveal className="contact-reveal"><div><p>05 / {copy.sectionLabels.contact}</p><h2>{copy.contactTitle}</h2></div></Reveal>
-          <Reveal className="contact-reveal" delay={0.08}><div><p>{copy.contactBody}</p><a href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight aria-hidden="true" /></a></div></Reveal>
+          <Reveal className="contact-reveal"><div><p>05 / {copy.sectionLabels.contact}</p><h2>{copy.contactTitle}</h2><MorphingLoop /></div></Reveal>
+          <Reveal className="contact-reveal" delay={0.08}><div><p>{copy.contactBody}</p><a href={`mailto:${site.email}`}>{site.email}<ArrowUpRight aria-hidden="true" /></a></div></Reveal>
         </section>
       </main>
 
-      <SiteFooter locale={locale} />
+      <SiteFooter locale={locale} site={site} />
     </div>
   )
 }

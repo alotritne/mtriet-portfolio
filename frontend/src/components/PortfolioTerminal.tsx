@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Minus, Square, X } from 'lucide-react'
-import type { Locale } from '../types'
-import { getCopy, localizeSkillItem, profile, skillGroups } from '../data'
+import type { Locale, SiteData } from '../types'
+import { localizeSkillItem } from '../data'
+import { defaultSite } from '../siteDefaults'
 
 type Entry = { command: string; output?: string }
 
@@ -24,27 +25,26 @@ function FormattedTerminalOutput({ text, command }: { text?: string; command: st
   )
 }
 
-export function PortfolioTerminal({ locale }: { locale: Locale }) {
+export function PortfolioTerminal({ locale, site = defaultSite }: { locale: Locale; site?: SiteData }) {
   const [value, setValue] = useState('')
   const [history, setHistory] = useState<Entry[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
-  const skillLabels = getCopy(locale).groupLabels
-  const skillRows = skillGroups.map(group => ({
-    label: skillLabels[group.key],
+  const skillRows = site.skills.map(group => ({
+    label: group.label[locale],
     items: group.items.map(item => localizeSkillItem(item, locale)),
   }))
-  const skillLabelWidth = Math.max(...skillRows.map(row => row.label.length))
+  const skillLabelWidth = Math.max(0, ...skillRows.map(row => row.label.length))
   const skillSummary = skillRows.map(row => `${row.label.padEnd(skillLabelWidth)} : ${row.items.join(' · ')}`).join('\n')
 
   const messages = locale === 'vi' ? {
     welcome: 'Chào bạn. Đây là một cách khác để khám phá portfolio.',
     hint: 'Gõ “help” để xem danh sách lệnh.',
     help: 'help · about · skills · projects · contact · clear',
-    about: `Tên       : ${profile.name}\nNgành     : ${profile.major.vi}\nSinh viên : Năm ${profile.studentYear}\nGPA       : ${profile.gpa}\nĐịa điểm  : ${profile.location.vi}`,
+    about: `Tên       : ${site.name}\nNgành     : ${site.major.vi}\nSinh viên : Năm ${site.studentYear}\nGPA       : ${site.gpa}\nĐịa điểm  : ${site.location.vi}`,
     skills: skillSummary,
     projects: 'Đang chuyển đến phần dự án…',
-    contact: `Kênh liên hệ:\nEmail    : ${profile.email}\nGitHub   : ${profile.github.replace('https://', '')}\nFacebook : ${profile.facebook.replace('https://www.', '').replace(/\/$/, '')}\nWebsite  : ${profile.website.replace('https://', '').replace(/\/$/, '')}`,
+    contact: `Kênh liên hệ:\nEmail    : ${site.email}\nGitHub   : ${site.github.replace('https://', '')}\nFacebook : ${site.facebook.replace('https://www.', '').replace(/\/$/, '')}\nWebsite  : ${site.website.replace('https://', '').replace(/\/$/, '')}`,
     unknown: 'Không tìm thấy lệnh. Gõ “help” để xem danh sách.',
     label: 'Terminal tương tác của portfolio',
     placeholder: 'Nhập một lệnh…',
@@ -53,10 +53,10 @@ export function PortfolioTerminal({ locale }: { locale: Locale }) {
     welcome: 'Welcome. This is another way to explore the portfolio.',
     hint: 'Type “help” to see the command list.',
     help: 'help · about · skills · projects · contact · clear',
-    about: `Name      : ${profile.name}\nMajor     : ${profile.major.en}\nYear      : Year ${profile.studentYear}\nGPA       : ${profile.gpa}\nLocation  : ${profile.location.en}`,
+    about: `Name      : ${site.name}\nMajor     : ${site.major.en}\nYear      : Year ${site.studentYear}\nGPA       : ${site.gpa}\nLocation  : ${site.location.en}`,
     skills: skillSummary,
     projects: 'Moving to the projects section…',
-    contact: `Contact channels:\nEmail    : ${profile.email}\nGitHub   : ${profile.github.replace('https://', '')}\nFacebook : ${profile.facebook.replace('https://www.', '').replace(/\/$/, '')}\nWebsite  : ${profile.website.replace('https://', '').replace(/\/$/, '')}`,
+    contact: `Contact channels:\nEmail    : ${site.email}\nGitHub   : ${site.github.replace('https://', '')}\nFacebook : ${site.facebook.replace('https://www.', '').replace(/\/$/, '')}\nWebsite  : ${site.website.replace('https://', '').replace(/\/$/, '')}`,
     unknown: 'Command not found. Type “help” to see the list.',
     label: 'Interactive portfolio terminal',
     placeholder: 'Enter a command…',

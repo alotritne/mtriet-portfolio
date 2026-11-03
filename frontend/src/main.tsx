@@ -4,6 +4,10 @@ import App from './App'
 import { NotFoundPage } from './components/NotFoundPage'
 import EldoradoCalculator from './pages/EldoradoCalculator'
 import './styles/index.css'
+import './styles/liveMotion.css'
+import { motionIsEnabled } from './hooks/useMotionPreference'
+
+document.documentElement.dataset.motion = motionIsEnabled() ? 'on' : 'off'
 
 const AdminApp = lazy(() => import('./admin/AdminApp').then(module => ({ default: module.AdminApp })))
 const BlogPage = lazy(() => import('./blog/BlogPage'))

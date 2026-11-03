@@ -2,6 +2,20 @@ export type Locale = 'vi' | 'en'
 
 export type LocalizedText = Record<Locale, string>
 
+export interface SiteData {
+  name: string
+  major: LocalizedText
+  studentYear: number
+  gpa: string
+  location: LocalizedText
+  email: string
+  github: string
+  facebook: string
+  website: string
+  roles: string[]
+  skills: { key: string; label: LocalizedText; items: string[] }[]
+}
+
 export interface BlogPost {
   id?: string
   slug: string

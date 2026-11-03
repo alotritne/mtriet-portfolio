@@ -51,6 +51,36 @@ test('anonymous users cannot read drafts or mutate posts', async () => {
   await request(app).put(`/api/posts/${new ObjectId()}`).send(draft).expect(401)
   await request(app).delete(`/api/posts/${new ObjectId()}`).expect(401)
 })
+
+test('site profile requires admin for writes, validates fields and serves saved content publicly', async () => {
+  assert.equal((await request(app).get('/api/site/public').expect(200)).body.site, null)
+  await request(app).get('/api/site').expect(401)
+  await request(app).put('/api/site').send({ name: 'Unauthorized' }).expect(401)
+
+  const site = {
+    name: 'Example Student',
+    major: { vi: 'Công nghệ thông tin', en: 'Information Technology' },
+    studentYear: 3,
+    gpa: '3.25',
+    location: { vi: 'TP. Hồ Chí Minh', en: 'Ho Chi Minh City' },
+    email: 'demo@example.com',
+    github: 'https://github.com/example',
+    facebook: 'https://facebook.com/example',
+    website: 'https://example.com',
+    roles: ['Software Developer'],
+    skills: [{ key: 'languages', label: { vi: 'Ngôn ngữ', en: 'Languages' }, items: ['TypeScript', 'Java'] }],
+  }
+  await request(app).put('/api/site').set('Authorization', authorization).send({ ...site, gpa: '5.0' }).expect(400)
+  await request(app).put('/api/site').set('Authorization', authorization).send({ ...site, skills: [site.skills[0], site.skills[0]] }).expect(400)
+  const saved = await request(app).put('/api/site').set('Authorization', authorization).send(site).expect(200)
+  assert.deepEqual(saved.body.site, site)
+  assert.deepEqual((await request(app).get('/api/site/public').expect(200)).body.site, site)
+  assert.deepEqual((await request(app).get('/api/site').set('Authorization', authorization).expect(200)).body.site, site)
+
+  const edited = { ...site, name: 'Updated Student', skills: [] }
+  await request(app).put('/api/site').set('Authorization', authorization).send(edited).expect(200)
+  assert.deepEqual((await request(app).get('/api/site/public').expect(200)).body.site, edited)
+})
 test('MongoDB lifecycle: draft → publish → reload → edit → unpublish → delete', async () => {
   const created = await request(app).post('/api/posts').set('Authorization', authorization).send(draft).expect(201)
   const id = created.body.post.id as string

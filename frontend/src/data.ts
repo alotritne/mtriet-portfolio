@@ -4,7 +4,7 @@ export const profile = {
   name: "Nguyễn Ngọc Minh Triết",
   nameLines: ["Nguyễn Ngọc", "Minh Triết"] as const,
   major: { vi: "Công nghệ thông tin", en: "Information Technology" },
-  studentYear: 2,
+  studentYear: 3,
   studentLabel: {
     vi: "Sinh viên ngành Công nghệ thông tin",
     en: "Information Technology student",

@@ -12,13 +12,15 @@ Portfolio cá nhân giới thiệu định hướng phát triển phần mềm, 
 - Danh sách kỹ năng được nhóm theo từng lĩnh vực.
 - Dự án được trình bày theo bài toán, cách tiếp cận kỹ thuật, tính năng và công nghệ.
 - Hiệu ứng ánh sáng theo con trỏ, có điều chỉnh theo nền sáng và tối.
-- Hỗ trợ bàn phím, focus state và `prefers-reduced-motion`.
-- Trang `/admin` để quản lý dự án sau khi đăng nhập.
+- Hỗ trợ bàn phím, focus state và công tắc **Hiệu ứng: Bật/Tắt**; lựa chọn được lưu trong trình duyệt. Mặc định các hiệu ứng luôn chạy, kể cả khi Windows bật chế độ giảm chuyển động; người xem vẫn có thể chủ động tắt.
+- Thanh công nghệ chạy vô hạn, logo thương hiệu từ `simple-icons` và hình vòng tròn có lớp ngoài/lõi trong biến đổi độc lập.
+- Trang `/admin` để thêm, sửa, xóa dự án sau khi đăng nhập.
+- Trang `/admin?view=site` để thay đổi hồ sơ, GPA, năm học, liên hệ, vai trò và thêm/xóa/sửa các nhóm kỹ năng trong MongoDB.
 - Blog tại `/blog`, trang đọc riêng `/blog/:slug` và các bài mới nhất trên portfolio.
 - Trang `/projects` liệt kê toàn bộ dự án, hỗ trợ tìm kiếm theo nội dung và lọc theo công nghệ; URL lưu lại bộ lọc để có thể chia sẻ.
 - Trang `/blog` hỗ trợ tìm theo tiêu đề, mô tả hoặc chủ đề, lọc tag và phân trang 12 bài.
 - Trình soạn thảo Tiptap trong `/admin?view=blog`: định dạng, bảng, ảnh qua URL, bản nháp, xem trước và xuất bản song ngữ.
-- Thẻ dự án gọn với phần chi tiết mở rộng, biểu tượng kỹ năng, thanh tiến độ cuộn, hiệu ứng xuất hiện nội dung và chuyển vị trí khi lọc. Tất cả đều hỗ trợ `prefers-reduced-motion`.
+- Thẻ dự án gọn với phần chi tiết mở rộng, biểu tượng kỹ năng, thanh tiến độ cuộn, hiệu ứng xuất hiện nội dung và chuyển vị trí khi lọc. Có thể tắt chuyển động bằng công tắc ở trang chủ.
 - Access JWT ngắn hạn và refresh JWT xoay vòng bằng cookie `HttpOnly`.
 
 ## Công nghệ
@@ -29,6 +31,7 @@ Portfolio cá nhân giới thiệu định hướng phát triển phần mềm, 
 - TailwindCSS 4
 - Motion
 - Lucide React
+- Simple Icons (biểu tượng thương hiệu công nghệ)
 
 Backend:
 
@@ -90,7 +93,16 @@ portfolio/
 └── render.yaml              # Blueprint cho hai service Render
 ```
 
-Thông tin fallback, liên hệ và kỹ năng được quản lý trong `frontend/src/data.ts`. Dự án trên website ưu tiên dữ liệu từ MongoDB và dùng dữ liệu fallback khi API chưa sẵn sàng.
+Thông tin fallback, liên hệ và kỹ năng được khai báo trong `frontend/src/data.ts` và `frontend/src/siteDefaults.ts`. Khi đã lưu hồ sơ trong trang quản trị, website đọc từ MongoDB qua `GET /api/site/public`. Khi API chưa sẵn sàng hoặc chưa có hồ sơ lưu, giao diện dùng dữ liệu mặc định. Dự án và blog được quản lý bằng các API riêng.
+
+## Quản lý nội dung trên website
+
+1. Đăng nhập tại `/admin` bằng tài khoản quản trị đã tạo trong MongoDB.
+2. Mục **Dự án**: thêm mới, sửa, xóa, chọn công khai/nổi bật hoặc nhập các dự án mặc định nếu database đang trống.
+3. Mục **Blog** (`/admin?view=blog`): viết, sửa, lưu bản nháp, xuất bản, gỡ và xóa bài.
+4. Mục **Hồ sơ & kỹ năng** (`/admin?view=site`): sửa thông tin sinh viên, liên kết, các vai trò; thêm/xóa nhóm kỹ năng và chỉnh danh sách công nghệ (mỗi dòng một mục); chọn **Lưu nội dung** để áp dụng.
+
+Các đường dẫn API chính: `GET /api/site/public` là công khai; `GET /api/site` và `PUT /api/site` yêu cầu access token quản trị. CRUD dự án tại `/api/projects`, CRUD blog tại `/api/posts`. Không có endpoint công khai để sửa dữ liệu. Nếu API gặp lỗi kết nối, nội dung chưa được lưu sẽ không xuất hiện trên website.
 
 ## Production build
 
@@ -183,6 +195,8 @@ Khi tạo Blueprint, cung cấp:
 - Backend `MONGODB_URI`: connection string MongoDB Atlas.
 - Backend `FRONTEND_ORIGIN`: origin frontend, ví dụ `https://mtriet.is-a.dev`. Có thể khai báo nhiều origin cách nhau bằng dấu phẩy trong lúc chuyển domain.
 
+`VITE_API_URL` được Vite nhúng vào JavaScript lúc **build**, nên nếu thay đổi domain API, cần build/deploy lại Static Site. Đặt `FRONTEND_ORIGIN` đúng các domain thực tế truy cập trang quản trị, không thêm đường dẫn. Render cần có biến `MONGODB_URI` hoạt động và JWT secrets riêng cho backend. Kiểm tra backend qua `https://api.mtriet.is-a.dev/api/health` (kết quả `{"status":"ok"}`).
+
 Nên gắn backend với subdomain `api.mtriet.is-a.dev`. Frontend và backend cùng site giúp refresh cookie hoạt động ổn định hơn trên các trình duyệt hạn chế third-party cookie.
 
 Cấu hình frontend thủ công tương đương:
@@ -193,7 +207,7 @@ Cấu hình frontend thủ công tương đương:
 | Publish Directory | `dist` |
 | Root Directory | `frontend` |
 
-Render có thể tự động triển khai lại mỗi khi repository nhận commit mới trên nhánh đã chọn.
+Blueprint trong `render.yaml` khai báo `autoDeployTrigger: commit` cho cả hai service. Khi các service đã liên kết với repository GitHub trên Render, commit mới được push lên nhánh theo dõi sẽ tự kích hoạt build/deploy; kiểm tra **Events** và **Logs** của từng service để xác nhận kết quả.
 
 Sau deploy backend, chạy script `admin:create` từ môi trường có quyền truy cập cùng MongoDB Atlas, sau đó đăng nhập tại `/admin`.
 
