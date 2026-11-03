@@ -5,6 +5,7 @@ import { NotFoundPage } from './components/NotFoundPage'
 import EldoradoCalculator from './pages/EldoradoCalculator'
 import './styles/index.css'
 import './styles/liveMotion.css'
+import './styles/portfolioRework.css'
 import { motionIsEnabled } from './hooks/useMotionPreference'
 
 document.documentElement.dataset.motion = motionIsEnabled() ? 'on' : 'off'

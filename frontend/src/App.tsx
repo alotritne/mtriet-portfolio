@@ -48,9 +48,10 @@ export default function App() {
       <MotionSwitch locale={locale} />
 
       <main id="main">
-        <section className="portfolio-hero portfolio-shell">
+        <section className="portfolio-hero portfolio-hero-reimagined portfolio-shell" aria-label={locale === 'vi' ? 'Giới thiệu Minh Triết' : 'Introducing Minh Triet'}>
           <motion.div className="portfolio-hero-copy" variants={heroGroup} initial={reduceMotion ? false : 'hidden'} animate="visible">
-            <motion.p variants={heroItem} className="portfolio-role">{locale === 'vi' ? `Sinh viên năm ${site.studentYear}` : `Year ${site.studentYear} student`} · {site.location[locale]}</motion.p>
+            <motion.p variants={heroItem} className="hero-edition"><span className="hero-status-dot" /> {locale === 'vi' ? 'PORTFOLIO CÁ NHÂN' : 'PERSONAL PORTFOLIO'} <span>— 2026</span></motion.p>
+            <motion.p variants={heroItem} className="portfolio-role">{locale === 'vi' ? `Xin chào, mình là` : `Hello, I'm`}</motion.p>
             <motion.h1 variants={heroItem} className="kinetic-name">
               <span className="kinetic-line"><span>{nameLines[0]}</span></span>
               <span className="kinetic-line is-accent"><span>{nameLines[1]}</span></span>
@@ -58,11 +59,33 @@ export default function App() {
             <motion.h2 variants={heroItem}><TypingText texts={site.roles} /></motion.h2>
             <motion.p variants={heroItem} className="portfolio-summary">{copy.heroBody}</motion.p>
             <motion.div variants={heroItem} className="portfolio-cta"><a className="primary" href="/projects">{copy.viewProjects}<ArrowUpRight aria-hidden="true" /></a><a href={`mailto:${site.email}`}>{copy.contact}<Mail aria-hidden="true" /></a></motion.div>
+            <motion.div variants={heroItem} className="hero-scroll-cue"><span>↘</span>{locale === 'vi' ? 'CUỘN ĐỂ KHÁM PHÁ' : 'SCROLL TO EXPLORE'}<span>01 / 05</span></motion.div>
           </motion.div>
-          <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}><PortfolioTerminal locale={locale} site={site} /></motion.div>
+          <motion.div className="hero-artwork" initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.65, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}>
+            <div className="hero-artwork-top"><span>FIG. 01 / IDENTITY</span><span>MT — 03</span></div>
+            <div className="hero-orbit-field">
+              <div className="hero-artwork-crosshair hero-crosshair-one" aria-hidden="true">+</div>
+              <div className="hero-artwork-crosshair hero-crosshair-two" aria-hidden="true">+</div>
+              <MorphingLoop />
+              <div className="hero-centre-label" aria-hidden="true">m<span>t</span><i>®</i></div>
+              <div className="hero-float-note hero-float-year"><small>{locale === 'vi' ? 'SINH VIÊN NĂM' : 'STUDY YEAR'}</small><strong>{String(site.studentYear).padStart(2, '0')}</strong></div>
+              <div className="hero-float-note hero-float-gpa"><small>GPA / 4.0</small><strong>{site.gpa}</strong></div>
+            </div>
+            <div className="hero-artwork-bottom"><span>CREATIVE CODE / REAL SYSTEMS</span><span>↗ 001</span></div>
+          </motion.div>
+          <div className="hero-fact-rail">
+            <div><span>01 / {locale === 'vi' ? 'CHUYÊN NGÀNH' : 'DISCIPLINE'}</span><strong>{site.major[locale]}</strong></div>
+            <div><span>02 / {locale === 'vi' ? 'ĐỊA ĐIỂM' : 'BASED IN'}</span><strong>{site.location[locale]}</strong></div>
+            <div><span>03 / {locale === 'vi' ? 'HỌC VẤN' : 'ACADEMIC'}</span><strong>{locale === 'vi' ? `Năm ${site.studentYear}` : `Year ${site.studentYear}`} · GPA {site.gpa}</strong></div>
+          </div>
         </section>
 
         <TechMarquee technologies={site.skills.flatMap(group => group.items)} />
+
+        <section className="portfolio-console-section portfolio-shell" aria-label={locale === 'vi' ? 'Terminal tương tác' : 'Interactive terminal'}>
+          <div className="portfolio-console-intro"><span>↳ 00 / TERMINAL</span><h2>{locale === 'vi' ? <>Gõ một lệnh.<br/><em>Hiểu thêm về mình.</em></> : <>Type a command.<br/><em>Get to know me.</em></>}</h2><p>{locale === 'vi' ? 'Một góc nhỏ để khám phá thông tin, kỹ năng và dự án qua dòng lệnh. Hãy thử một lệnh bên phải.' : 'Explore my background, skills, and projects through the command line. Try a command on the right.'}</p><span className="console-footnote">&lt;/ INTERACTIVE PROFILE &gt;</span></div>
+          <div className="portfolio-console-window"><PortfolioTerminal locale={locale} site={site} /></div>
+        </section>
 
         <motion.section initial={false} whileInView={reduceMotion ? {} : { y: [16, 0], opacity: [0.7, 1] }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5 }} className="portfolio-section portfolio-about portfolio-shell" id="about">
           <header className="portfolio-section-head"><span>01</span><div><p>{copy.sectionLabels.about}</p><h2>{copy.aboutTitle}</h2></div></header>
