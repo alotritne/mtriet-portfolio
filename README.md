@@ -7,9 +7,9 @@ Portfolio cá nhân giới thiệu định hướng phát triển phần mềm, 
 - Giao diện responsive, dark-mode first.
 - Nội dung tiếng Việt và tiếng Anh, tự nhận diện ngôn ngữ trình duyệt.
 - Ghi nhớ lựa chọn ngôn ngữ trên thiết bị.
-- Hero với hiệu ứng typing luân phiên các định hướng kỹ thuật.
-- Terminal tương tác hỗ trợ các lệnh `help`, `about`, `skills`, `projects`, `contact` và `clear`.
-- Danh sách kỹ năng được nhóm theo từng lĩnh vực.
+- Hero mới với quỹ đạo chuyển động, vai trò luân phiên và các liên kết khám phá dự án/liên hệ.
+- Giao diện trang chủ thống nhất theo mẫu `portfolio-mtriet`: hero tối, marquee công nghệ, các dự án, 4 nhóm kỹ năng trên nền mint, và vòng tròn liên hệ biến dạng cả viền ngoài lẫn lõi trong.
+- Danh sách kỹ năng chia thành bốn nhóm: Ngôn ngữ, Web & Backend, Data & Mobile, Công cụ.
 - Dự án được trình bày theo bài toán, cách tiếp cận kỹ thuật, tính năng và công nghệ.
 - Hiệu ứng ánh sáng theo con trỏ, có điều chỉnh theo nền sáng và tối.
 - Hỗ trợ bàn phím, focus state và công tắc **Hiệu ứng: Bật/Tắt**; lựa chọn được lưu trong trình duyệt. Mặc định các hiệu ứng luôn chạy, kể cả khi Windows bật chế độ giảm chuyển động; người xem vẫn có thể chủ động tắt.
@@ -83,8 +83,10 @@ portfolio/
 │   │   ├── admin/           # Giao diện quản trị
 │   │   ├── components/      # Các component portfolio
 │   │   ├── lib/             # API client
-│   │   ├── styles/          # Style toàn cục
-│   │   ├── App.tsx          # Bố cục portfolio
+│   │   ├── portfolio/       # Trang chủ theo mẫu: HTML, CSS, motion, CMS hydration
+│   │   ├── styles/          # Style dành cho các trang admin/blog/projects
+│   │   ├── App.tsx          # Trang chủ cùng dữ liệu CMS
+│   │   ├── siteDefaults.ts  # Hồ sơ và bốn nhóm kỹ năng mặc định
 │   │   └── data.ts          # Dữ liệu fallback và bản dịch
 │   ├── index.html
 │   ├── tokens.css           # Design tokens

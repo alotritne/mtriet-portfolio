@@ -1,4 +1,4 @@
-import { getCopy, profile, skillGroups } from './data'
+import { profile } from './data'
 import type { SiteData } from './types'
 
 export const defaultSite: SiteData = {
@@ -12,9 +12,28 @@ export const defaultSite: SiteData = {
   facebook: profile.facebook,
   website: profile.website,
   roles: [...profile.roles],
-  skills: skillGroups.map(group => ({
-    key: group.key,
-    label: { vi: getCopy('vi').groupLabels[group.key], en: getCopy('en').groupLabels[group.key] },
-    items: [...group.items],
-  })),
+  // Keep the public portfolio and the admin's initial content in sync with the
+  // four-column skill layout from the selected design.
+  skills: [
+    {
+      key: 'languages',
+      label: { vi: 'Ngôn ngữ', en: 'Languages' },
+      items: ['JavaScript', 'TypeScript', 'Java', 'Kotlin', 'Python', 'C++'],
+    },
+    {
+      key: 'webBackend',
+      label: { vi: 'Web & Backend', en: 'Web & Backend' },
+      items: ['React', 'Node.js', 'Express', 'Prisma', 'REST API', 'Vite'],
+    },
+    {
+      key: 'dataMobile',
+      label: { vi: 'Data & Mobile', en: 'Data & Mobile' },
+      items: ['MySQL', 'MongoDB', 'Android', 'Jetpack Compose', 'MQTT'],
+    },
+    {
+      key: 'workflow',
+      label: { vi: 'Công cụ', en: 'Tools' },
+      items: ['Git', 'GitHub', 'Docker (cơ bản)', 'Tailwind CSS'],
+    },
+  ],
 }

@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Minh Triết monogram">
-  <rect width="64" height="64" rx="16" fill="#0e262d"/>
-  <rect x="4" y="4" width="56" height="56" rx="13" fill="none" stroke="#a7dec2" stroke-opacity=".35"/>
-  <path d="M12 43V22h5l7 10 7-10h5v21h-5V30l-7 10-7-10v13Z" fill="#a7dec2"/>
-  <path d="M38 22h17v5h-6v16h-5V27h-6Z" fill="#eef7f1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="18" fill="#BAF1D3"/>
+  <g stroke="#10252F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 43V26M11 30C11 22 20 22 20 30V43M20 30C20 22 29 22 29 30V43"/>
+    <path d="M43 19V37C43 42 46 44 52 42M37 29H53"/>
+  </g>
 </svg>
