@@ -26,7 +26,7 @@ export default function BlogPage() {
     return () => { active = false }
   }, [slug, attempt])
   useEffect(() => { document.title = `${post ? post.title[locale] : 'Blog'} — ${profile.name}` }, [post, locale])
-  return <div className="portfolio-page catalog-page" id="top"><a className="skip-link" href="#main">{locale === 'vi' ? 'Đến nội dung' : 'Skip to content'}</a><ScrollProgress /><SiteHeader locale={locale} setLocale={setLocale} current="blog" />
+  return <div className={slug ? 'portfolio-page catalog-page blog-article-page' : 'portfolio-page catalog-page'} id="top"><a className="skip-link" href="#main">{locale === 'vi' ? 'Đến nội dung' : 'Skip to content'}</a><ScrollProgress /><SiteHeader locale={locale} setLocale={setLocale} current="blog" />
     <main id="main" className="portfolio-shell catalog-main">
       {!slug ? <><header className="catalog-heading page-enter"><p className="catalog-eyebrow">02 / Blog</p><h1>{copy.title}</h1><div className="catalog-lead"><p>{copy.intro}</p><a className="catalog-cross-link" href="/projects">{copy.projects}<ArrowUpRight size={18} aria-hidden="true" /></a></div></header><BlogList locale={locale} /><Reveal><a className="catalog-next" href="/projects"><div><p className="catalog-eyebrow">{copy.nextSection}</p><h2>{copy.projects}</h2><p>{copy.projectsBody}</p></div><ArrowUpRight size={32} aria-hidden="true" /></a></Reveal></>
         : error ? <div className="blog-empty" role="alert"><p>{copy.error}</p><button className="button" onClick={() => setAttempt(value => value + 1)}>{copy.retry}</button></div>

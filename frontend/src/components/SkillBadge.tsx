@@ -17,13 +17,23 @@ const logos: Record<string, SimpleIcon> = {
   Git: siGit, GitHub: siGithub, Docker: siDocker,
 }
 
+// A distinct, legible tint for each technology on the dark portfolio surface.
+const logoColors: Record<string, string> = {
+  'C++': '#8AB8F2', Java: '#F29673', Kotlin: '#C4A6FF', JavaScript: '#F7DF1E',
+  Python: '#FFD568', TypeScript: '#78BEFA', React: '#61DAFB', Vite: '#BDA7FF',
+  TailwindCSS: '#67D7EC', 'Tailwind CSS': '#67D7EC', 'Node.js': '#8BD482',
+  Express: '#E2F3E9', Prisma: '#A8CBD9', MySQL: '#7DBDE0', MongoDB: '#74D58A',
+  Android: '#3DDC84', 'Jetpack Compose': '#9DCBFF', MQTT: '#CEADFF',
+  Git: '#F9886B', GitHub: '#E2F3E9', Docker: '#69B8FF',
+}
+
 export function TechnologyLogo({ name }: { name: string }) {
   const logo = logos[name]
   if (!logo) {
     const Icon = name === 'JWT Authentication' ? ShieldCheck : name === 'REST API' ? Network : name === 'MVVM' ? Layers : Code2
     return <Icon size={17} aria-hidden="true" />
   }
-  return <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={logo.path}/></svg>
+  return <svg data-tech-logo="true" style={{ color: logoColors[name] ?? `#${logo.hex}` }} width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={logo.path}/></svg>
 }
 
 export function SkillBadge({ name, locale }: { name: string; locale: Locale }) {

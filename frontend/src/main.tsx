@@ -6,6 +6,7 @@ import EldoradoCalculator from './pages/EldoradoCalculator'
 import './styles/index.css'
 import './styles/liveMotion.css'
 import './styles/portfolioRework.css'
+import './styles/portfolioUnified.css'
 import { motionIsEnabled } from './hooks/useMotionPreference'
 
 document.documentElement.dataset.motion = motionIsEnabled() ? 'on' : 'off'

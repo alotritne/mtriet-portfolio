@@ -67,7 +67,7 @@ export default function App() {
               <div className="hero-artwork-crosshair hero-crosshair-one" aria-hidden="true">+</div>
               <div className="hero-artwork-crosshair hero-crosshair-two" aria-hidden="true">+</div>
               <MorphingLoop />
-              <div className="hero-centre-label" aria-hidden="true">m<span>t</span><i>®</i></div>
+              <div className="hero-centre-label" aria-hidden="true">M<span>T</span></div>
               <div className="hero-float-note hero-float-year"><small>{locale === 'vi' ? 'SINH VIÊN NĂM' : 'STUDY YEAR'}</small><strong>{String(site.studentYear).padStart(2, '0')}</strong></div>
               <div className="hero-float-note hero-float-gpa"><small>GPA / 4.0</small><strong>{site.gpa}</strong></div>
             </div>

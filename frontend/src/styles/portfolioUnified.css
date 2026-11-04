@@ -1,0 +1,283 @@
+/* The single visual language for every public portfolio screen.
+   Keep this last in the CSS cascade so legacy section styles cannot
+   reintroduce the former pale green / white layout. */
+.portfolio-page,
+.catalog-page,
+.blog-article-page {
+  --color-canvas: #0a1e22;
+  --color-canvas-raised: #102b2b;
+  --color-paper: #0a1e22;
+  --color-ink: #e2f3e9;
+  --color-ink-2: #9fb7af;
+  --color-muted: #9fb7af;
+  --color-accent: #acecc9;
+  --color-accent-ink: #0a1e22;
+  --color-rule: rgb(187 225 210 / 19%);
+  --color-rule-2: rgb(187 225 210 / 12%);
+  background: #0a1e22;
+  color: #e2f3e9;
+}
+
+.portfolio-page { overflow-x: clip; }
+.portfolio-page::before,
+.portfolio-page::after,
+.portfolio-page > main::before,
+.portfolio-page > main::after,
+.portfolio-page .portfolio-about::before,
+.portfolio-page .portfolio-about::after,
+.portfolio-page .portfolio-skills::before,
+.portfolio-page .portfolio-skills::after,
+.portfolio-page .portfolio-projects::before,
+.portfolio-page .portfolio-projects::after,
+.portfolio-page .portfolio-contact::before,
+.portfolio-page .portfolio-contact::after {
+  content: none !important;
+  display: none !important;
+}
+
+.portfolio-page :is(.portfolio-about, .portfolio-skills, .portfolio-projects, .portfolio-blog, .portfolio-contact, .portfolio-console-section) {
+  color: #e2f3e9;
+  background: #0a1e22;
+  border-color: rgb(187 225 210 / 16%);
+}
+
+.portfolio-page .portfolio-section-head,
+.portfolio-page .portfolio-section-head :is(h2, h3),
+.portfolio-page .portfolio-about h2,
+.portfolio-page .portfolio-skills h2,
+.portfolio-page .portfolio-projects h2,
+.portfolio-page .portfolio-blog h2,
+.portfolio-page .portfolio-contact h2 { color: #e2f3e9; }
+
+.portfolio-page :is(.portfolio-section-head p, .portfolio-about p, .portfolio-contact p) { color: #9fb7af; }
+
+.portfolio-page .portfolio-skills {
+  border-block: 1px solid rgb(187 225 210 / 16%);
+  background: #102b2b;
+  color: #e2f3e9;
+}
+
+.portfolio-page .portfolio-skills > .portfolio-shell { background: transparent; }
+.portfolio-page .portfolio-skills .portfolio-section-head > span { color: #acecc9; }
+.portfolio-page .portfolio-skills .portfolio-section-head > div > p,
+.portfolio-page .portfolio-skills .portfolio-section-head > p { color: #9fb7af; }
+.portfolio-page .skills-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  border-block: 1px solid rgb(187 225 210 / 18%);
+}
+.portfolio-page .skills-grid > article,
+.portfolio-page .skills-grid > article:nth-child(even),
+.portfolio-page .skills-grid > article:nth-child(odd) {
+  grid-column: auto;
+  border: 0;
+  border-right: 1px solid rgb(187 225 210 / 17%);
+  border-radius: 0;
+  background: transparent;
+  color: #e2f3e9;
+  box-shadow: none;
+  min-width: 0;
+  padding: clamp(1rem, 1.8vw, 1.8rem);
+  min-height: 0;
+}
+/* The previous design forced an odd final item to span a second row. */
+.portfolio-page .skills-grid > article:last-child:nth-child(odd) { border-right: 0; grid-column: auto; }
+.portfolio-page .skills-grid article .skill-items { margin-top: 0; }
+.portfolio-page .skills-grid h3 { margin-block: 1rem 1.25rem; }
+.portfolio-page .skills-grid > article:hover,
+.portfolio-page .skills-grid > article:focus-within {
+  transform: none;
+  background: rgb(172 236 201 / 4%);
+  border-color: rgb(187 225 210 / 17%);
+  box-shadow: none;
+}
+.portfolio-page .skills-grid :is(.skill-group-heading, .skill-group-number, h3) { color: #e2f3e9; }
+.portfolio-page .skills-grid .skill-group-number { color: #8fb3a7; }
+.portfolio-page .skills-grid .skill-group-icon {
+  color: #acecc9;
+  background: rgb(172 236 201 / 9%);
+  border-color: rgb(172 236 201 / 18%);
+}
+.portfolio-page .skills-grid .skill-group-icon svg { color: #acecc9; }
+.portfolio-page .skills-grid .skill-badge,
+.portfolio-page .skills-grid .skill-items > * {
+  background: #163630;
+  border: 1px solid rgb(187 225 210 / 19%);
+  color: #e2f3e9;
+  box-shadow: none;
+}
+.portfolio-page .skills-grid .skill-badge svg:not([data-tech-logo]) { color: #acecc9; }
+.portfolio-page .skills-grid .skill-badge:hover {
+  background: #1e463d;
+  border-color: rgb(172 236 201 / 50%);
+}
+
+.portfolio-page .portfolio-about-grid,
+.portfolio-page .portfolio-facts,
+.portfolio-page .portfolio-facts > div { border-color: rgb(187 225 210 / 18%); }
+.portfolio-page .portfolio-facts :is(dt, dd) { color: #e2f3e9; }
+.portfolio-page .portfolio-facts dt { color: #9fb7af; }
+
+.portfolio-page .projects-grid .portfolio-project-card,
+.portfolio-page .portfolio-project-card,
+.portfolio-page .project-disclosure,
+.portfolio-page .blog-rows .blog-row {
+  background: #102b2b;
+  border-color: rgb(187 225 210 / 18%);
+  color: #e2f3e9;
+  box-shadow: none;
+}
+.portfolio-page :is(.portfolio-project-card h2, .portfolio-project-card h3, .blog-row h2, .blog-row h3) { color: #e2f3e9; }
+.portfolio-page :is(.portfolio-project-card p, .project-card-eyebrow, .blog-row p) { color: #9fb7af; }
+.portfolio-page .portfolio-project-card:hover,
+.portfolio-page .blog-rows .blog-row:hover { border-color: rgb(172 236 201 / 48%); background: #143630; }
+.portfolio-page :is(.project-disclosure summary, .project-content, .project-card-footer, .project-card-footer a) {
+  background: transparent;
+  border-color: rgb(187 225 210 / 17%);
+  color: #d7ebde;
+}
+.portfolio-page :is(.project-card-footer a:hover, .project-disclosure summary:hover) { color: #acecc9; }
+
+.portfolio-page .portfolio-contact { border-top: 1px solid rgb(187 225 210 / 16%); }
+.portfolio-page .portfolio-footer,
+.portfolio-page .site-footer { background: #0a1e22; color: #9fb7af; border-color: rgb(187 225 210 / 17%); }
+.portfolio-page .portfolio-footer a,
+.portfolio-page .site-footer a { color: #e2f3e9; }
+.portfolio-page .portfolio-footer a:hover,
+.portfolio-page .site-footer a:hover { color: #acecc9; }
+
+.portfolio-page .live-tech-marquee {
+  background: #102b2b;
+  color: #b9d5ca;
+  border-block: 1px solid rgb(187 225 210 / 15%);
+}
+.portfolio-page .live-tech-marquee :is(span, p) { color: #b9d5ca; }
+.portfolio-page .live-tech-marquee .live-tech-item svg,
+.portfolio-page .live-tech-marquee .live-tech-item i { color: #acecc9; }
+.portfolio-page .live-tech-marquee .live-tech-item svg[data-tech-logo] { color: inherit; }
+
+/* Keep the hero illustration in the same deep teal system as every section. */
+.portfolio-page .hero-artwork {
+  --hero-art-ink: #e2f3e9;
+  --hero-art-muted: #9fb7af;
+  color: #e2f3e9;
+  background: #102b2b;
+  border-color: rgb(172 236 201 / 19%);
+  box-shadow: 0 1.2rem 5rem rgb(0 0 0 / 13%);
+}
+.portfolio-page .hero-artwork::before {
+  background-image: linear-gradient(rgb(172 236 201 / 8%) 1px, transparent 1px), linear-gradient(90deg, rgb(172 236 201 / 8%) 1px, transparent 1px);
+}
+.portfolio-page .hero-artwork-top,
+.portfolio-page .hero-artwork-bottom { border-color: rgb(172 236 201 / 17%); }
+.portfolio-page .hero-orbit-field::before,
+.portfolio-page .hero-orbit-field::after { border-color: rgb(172 236 201 / 18%); }
+.portfolio-page .hero-artwork .live-morph-guide { border-color: rgb(172 236 201 / 21%); }
+.portfolio-page .hero-artwork .live-morph-ring {
+  background: #acecc9;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 16%), inset 0 1px 1.2rem rgb(255 255 255 / 13%);
+}
+.portfolio-page .hero-artwork .live-morph-core { background: #102b2b; }
+.portfolio-page .hero-artwork .live-morph-spark { background: #acecc9; box-shadow: 0 0 1rem rgb(172 236 201 / 45%); }
+.portfolio-page .hero-centre-label {
+  color: #e2f3e9;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 750;
+  letter-spacing: -0.11em;
+  transform: translate(-0.04em, -0.04em);
+}
+.portfolio-page .hero-centre-label span { color: #acecc9; font-style: normal; font-weight: 750; }
+.portfolio-page .hero-float-note {
+  background: rgb(18 51 47 / 93%);
+  border-color: rgb(172 236 201 / 26%);
+  box-shadow: 0 0.7rem 2rem rgb(0 0 0 / 20%);
+}
+.portfolio-page .hero-float-note small { color: #a9c9bc; }
+.portfolio-page .hero-float-note strong { color: #e2f3e9; }
+.portfolio-page .hero-artwork-crosshair { color: rgb(172 236 201 / 50%); }
+
+/* Projects / blog routes use the same palette as the homepage. */
+.catalog-page,
+.blog-article-page { min-height: 100vh; }
+.catalog-page :is(.catalog-main, .catalog-heading, .catalog-filters),
+.blog-article-page :is(.catalog-main, .blog-article, .blog-heading) { color: #e2f3e9; background: transparent; }
+.catalog-page :is(h1, h2, h3),
+.blog-article-page :is(h1, h2, h3, h4) { color: #e2f3e9; }
+.catalog-page :is(p, .catalog-description),
+.blog-article-page :is(time, .blog-meta) { color: #9fb7af; }
+.blog-article-page .blog-heading > p { color: #b5cbc0; }
+.blog-article-page .article-prose,
+.blog-article-page .article-prose p,
+.blog-article-page .article-prose li { color: #c6d8cf; }
+.blog-article-page .article-prose :is(h2, h3, h4) { color: #e2f3e9; }
+.catalog-page :is(input, select, textarea),
+.blog-article-page :is(input, select, textarea) {
+  background: #12312e;
+  color: #e2f3e9;
+  border: 1px solid rgb(187 225 210 / 25%);
+}
+.catalog-page :is(input, select, textarea)::placeholder { color: #91aaa0; }
+.catalog-page select option { background: #12312e; color: #e2f3e9; }
+.catalog-page :is(.portfolio-project-card, .blog-row),
+.blog-article-page :is(.blog-row, .article-card) {
+  background: #102b2b;
+  color: #e2f3e9;
+  border-color: rgb(187 225 210 / 18%);
+}
+.blog-article-page .article-prose :is(blockquote, pre, table, th, td) {
+  background: #102b2b;
+  color: #c6d8cf;
+  border-color: rgb(187 225 210 / 22%);
+}
+.blog-article-page .article-prose th { color: #e2f3e9; }
+.blog-article-page .article-prose a,
+.catalog-page a:hover { color: #acecc9; }
+
+@media (max-width: 74rem) {
+  .portfolio-page .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .portfolio-page .skills-grid > article:nth-child(2n) { border-right: 0; }
+  .portfolio-page .skills-grid > article:not(:nth-last-child(-n+2)) { border-bottom: 1px solid rgb(187 225 210 / 17%); }
+  .portfolio-page .skills-grid > article:last-child:nth-child(odd) { border-right: 0; }
+}
+@media (max-width: 40rem) {
+  .portfolio-page .skills-grid { grid-template-columns: minmax(0, 1fr); }
+  .portfolio-page .skills-grid > article:nth-child(n) { border-right: 0; border-bottom: 1px solid rgb(187 225 210 / 17%); }
+  .portfolio-page .skills-grid > article:last-child { border-bottom: 0; }
+}
+
+@media (max-width: 47.99rem) {
+  .portfolio-page .site-nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+    width: 100%;
+    min-width: 0;
+    padding-inline: max(0.75rem, env(safe-area-inset-left)) max(0.75rem, env(safe-area-inset-right));
+    gap: 0.4rem;
+  }
+  .portfolio-page .portfolio-logo { font-size: 1.16rem; }
+  .portfolio-page .portfolio-nav-actions { min-width: 0; gap: 0.3rem; justify-self: end; }
+  .portfolio-page .language-switch { padding: 0.15rem; }
+  .portfolio-page .language-switch button { min-width: 1.75rem; min-height: 1.85rem; padding-inline: 0.3rem; }
+  .portfolio-page .site-menu { width: 2.65rem; height: 2.65rem; flex: none; }
+  .portfolio-page .portfolio-shell { width: min(calc(100% - 1.5rem), 80rem); }
+  .portfolio-page .portfolio-hero-reimagined .portfolio-hero-copy,
+  .portfolio-page .hero-artwork { min-width: 0; max-width: 100%; }
+  .portfolio-page .portfolio-hero-reimagined h1 {
+    font-size: clamp(2.28rem, 9.3vw, 4.35rem);
+    letter-spacing: -0.077em;
+    overflow-wrap: anywhere;
+  }
+  .portfolio-page .kinetic-line,
+  .portfolio-page .portfolio-summary { max-width: 100%; }
+  .portfolio-page .hero-scroll-cue { gap: 0.45rem; font-size: 0.56rem; letter-spacing: 0.045em; }
+  .portfolio-page .hero-artwork { padding: 0.75rem; min-height: 25rem; }
+  .portfolio-page .hero-orbit-field { min-height: 19.5rem; }
+  .portfolio-page .hero-float-year { right: 0; }
+  .portfolio-page .hero-float-gpa { left: 0; }
+  .portfolio-page .hero-centre-label { font-size: clamp(2.5rem, 12vw, 4.2rem); }
+  .portfolio-page .live-motion-switch {
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    max-width: calc(100% - 1.5rem);
+  }
+}
