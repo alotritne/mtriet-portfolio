@@ -143,7 +143,17 @@ img, svg { display: block; max-width: 100%; }
 .about-details span { font-size: 13px; color: var(--muted); }
 .about-details strong { font-size: 14px; font-weight: 700; }
 
-.section-work { background: var(--surface); }
+.section-work {
+  /* Restore the original light project section without changing dark artwork or other sections. */
+  --mint-deep: #157a70;
+  --body-text: #496068;
+  --muted: #6b8589;
+  --line: #d2dfd8;
+  background: #ffffff;
+  color: var(--ink);
+}
+.section-work .project-link { border-color: var(--ink); }
+.section-work .project-link-static { border-color: var(--line); }
 .section-heading { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(45px, 8vw, 125px); align-items: end; padding-bottom: 56px; }
 .section-heading > p { max-width: 385px; font-size: 17px; color: var(--body-text); line-height: 1.8; margin: 0 0 7px; }
 .project-list { border-top: 1px solid var(--line); }
