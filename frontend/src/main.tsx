@@ -26,7 +26,10 @@ const Root = pathname === '/'
 // The reference portfolio owns the home page's visual system. Legacy styles are
 // loaded only for the other routes so they cannot leak into its layout.
 async function renderApp() {
-  if (pathname !== '/') {
+  if (pathname === '/projects' || pathname === '/blog' || pathname.startsWith('/blog/')) {
+    await import('./portfolio/styles.css')
+    await import('./portfolio/catalog.css')
+  } else if (pathname !== '/') {
     await import('./styles/index.css')
     await import('./styles/liveMotion.css')
     await import('./styles/portfolioRework.css')

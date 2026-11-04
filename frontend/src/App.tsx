@@ -6,6 +6,7 @@ import { defaultSite } from './siteDefaults'
 import { useLocale } from './hooks/useLocale'
 import { portfolioApi } from './lib/api'
 import { hydratePortfolio } from './portfolio/hydrate'
+import { sortProjects } from './portfolio/projectOrder'
 import type { Project, SiteData } from './types'
 
 // React must keep this exact object reference between renders. Replacing the
@@ -17,7 +18,7 @@ const referenceMarkup = { __html: template }
 // supplies live CMS data and the persistent language choice.
 export default function App() {
   const [site, setSite] = useState<SiteData>(defaultSite)
-  const [projects, setProjects] = useState<Project[]>(fallbackProjects)
+  const [projects, setProjects] = useState<Project[]>(() => sortProjects(fallbackProjects))
   const [locale, setLocale] = useLocale()
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function App() {
       if (alive && value) setSite(value)
     }).catch(() => undefined)
     portfolioApi.publicProjects().then(value => {
-      if (alive) setProjects(value.filter(project => project.featured !== false))
+      if (alive) setProjects(sortProjects(value.filter(project => project.featured !== false)))
     }).catch(() => undefined)
     return () => { alive = false }
   }, [])

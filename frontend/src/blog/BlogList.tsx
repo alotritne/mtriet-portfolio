@@ -45,11 +45,11 @@ export function BlogList({ locale, preview = false }: { locale: Locale; preview?
       {error ? <div className="catalog-empty" role="alert"><BookOpen size={30} aria-hidden="true" /><p>{copy.error}</p><button className="button" onClick={() => setAttempt(value => value + 1)}>{copy.retry}</button></div>
         : !result ? <p className="catalog-loading" role="status">{copy.loading}</p>
         : !result.posts.length ? <div className="catalog-empty"><BookOpen size={32} aria-hidden="true" /><Heading>{filtered ? copy.noResults : copy.empty}</Heading><p>{filtered ? copy.noResultsBody : copy.emptyBody}</p>{(filtered || page > 1) && <button className="button" onClick={clear}>{copy.clear}</button>}</div>
-        : <div className="blog-rows">{result.posts.slice(0, preview ? 3 : 12).map((post, index) => <Reveal key={post.id} delay={Math.min(index, 3) * 0.045}><a className="blog-row" href={`/blog/${post.slug}`}>
+        : <div className="blog-rows">{result.posts.slice(0, preview ? 3 : 12).map((post, index) => <a key={post.id ?? `${post.slug}-${index}`} className="blog-row" href={`/blog/${post.slug}`}>
           <span className="blog-number">{String((page - 1) * 12 + index + 1).padStart(2, '0')}</span>
           <div><div className="blog-meta"><time dateTime={post.publishedAt || undefined}>{post.publishedAt && new Date(post.publishedAt).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>{post.tags.map(item => <span key={item}>{item}</span>)}</div><Heading>{post.title[locale]}</Heading><p>{post.excerpt[locale]}</p><span className="blog-read">{copy.read}<ArrowRight aria-hidden="true" size={16} /></span></div>
           <ArrowUpRight aria-hidden="true" className="blog-row-arrow" />
-        </a></Reveal>)}</div>}
+        </a>)}</div>}
     </div>
     {!preview && !error && result && (result.total > 12 || page > 1) && <nav className="blog-pagination" aria-label={locale === 'vi' ? 'Phân trang bài viết' : 'Article pagination'}><button className="button" disabled={loading || page === 1} onClick={() => setFilters({ ...filters, page: page - 1 })}>{copy.previous}</button><span>{copy.page} {page} / {Math.max(page, Math.ceil(result.total / 12))}</span><button className="button" disabled={loading || page * 12 >= result.total} onClick={() => setFilters({ ...filters, page: page + 1 })}>{copy.next}</button></nav>}
   </div>
